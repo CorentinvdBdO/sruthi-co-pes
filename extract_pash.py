@@ -1,16 +1,14 @@
 """
 takes the pash.dat file and turns it into manageable data
 """
+import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-
 import re
 
 def pash_to_dataframe():
     """
     Reads the file pash.dat and returns a pandas Dataframe
-    :return:
     """
     f = open("barrier/pash.dat", "r")
     lines = f.readlines()
@@ -36,6 +34,7 @@ def plot_surface (data, x, y, z):
 
 if __name__ == "__main__":
     data = pash_to_dataframe()
+    print (data)
     plot_surface(data, "P(1)", "P(2)", "Barrier")
     print ("runned")
 
