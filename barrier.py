@@ -11,7 +11,7 @@ f.close()
 pash_data = extract_pash.pash_to_dataframe(lines)
 print(pash_data[' Barrier'])
 
-x, y, z = extract_pash.plot_surface(pash_data, "P(1)", "P(2)", " Barrier")
+x, y, z = extract_pash.plot_surface(pash_data, 'P(1)', 'P(2)', ' Barrier')
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 surf = ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False)
