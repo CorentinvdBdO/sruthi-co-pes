@@ -15,20 +15,23 @@ def pash_to_dataframe(path):
     f.close()
     columns = lines[9].strip(" \n")
     columns = re.split(r"\s+", columns)
-    data = pd.DataFrame(columns=columns)
+    dataframe = pd.DataFrame(columns=columns)
 
     for line in lines[10:]:
         # The following condition adds a space before - signs to avoid number concatenation
-        for i in range (len(line)):
+        i=0
+        while i < (len(line)):
             if line[i] == "-":
                 line = line[:i]+" "+line[i:]
+                i+=1
+            i+=1
         line = line.strip(" \n")
         line = re.split(r"\s+", line)
         line = np.array(line).astype(float)
         line = pd.DataFrame([line], columns=columns)
-        data = data.append(line)
+        dataframe = dataframe.append(line)
 
-    return data
+    return dataframe
 
 def plot_surface(data, key_1, key_2, key_3):
     """
