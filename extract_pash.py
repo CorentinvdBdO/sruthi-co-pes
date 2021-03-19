@@ -27,7 +27,7 @@ def plot_surface (data, x, y, z):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     plt.plot(data[x], data[y], data[z])
-    plt.show
+    plt.show()
 
 if __name__ == "__main__":
     data = pash_to_dataframe()
