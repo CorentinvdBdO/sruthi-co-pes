@@ -5,7 +5,8 @@ import subprocess
 import os
 
 if __name__ == "__main__":
-    subprocess.call("barrier/barrier.exe")
+    subprocess.call("cd barrier\\")
+    subprocess.call("barrier.exe")
     # barrier/barrier.exe
     print ("runned")
 
