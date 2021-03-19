@@ -2,6 +2,7 @@
 takes the pash.dat file and turns it into manageable data
 """
 import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 import re
 
