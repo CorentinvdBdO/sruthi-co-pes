@@ -30,14 +30,14 @@ def pash_to_dataframe(path):
 
     return data
 
-def plot_surface(data, key1, key2, key3):
+def plot_surface(data, key_1, key_2, key_3):
     """
         Takes the DataFrame file with the keys of interest to give x, y and z to be plotted
     """
-    x = np.linspace(data['key1'].min(), data['key1'].max(), len(data['key1'].unique()))
-    y = np.linspace(data['key2'].min(), data['key2'].max(), len(data['key2'].unique()))
+    x = np.linspace(data[key_1].min(), data[key_1].max(), len(data[key_1].unique()))
+    y = np.linspace(data[key_2].min(), data[key_2].max(), len(data[key_2].unique()))
     x, y = np.meshgrid(x1, y1)
-    z = griddata((data['key1'], data['key2']), data['key3'], (x, y), method='cubic')
+    z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
 
     return x, y, z
 
