@@ -5,10 +5,8 @@ import re
 import extract_pash
 from scipy.interpolate import griddata
 
-f = open("barrier/pash.dat", "r")
-lines = f.readlines()
-f.close()
-pash_data = extract_pash.pash_to_dataframe(lines)
+
+pash_data = extract_pash.pash_to_dataframe("barrier/pash.dat")
 print(pash_data['Barrier'])
 
 x, y, z = extract_pash.plot_surface(pash_data, "P(1)", "P(2)", "Barrier")

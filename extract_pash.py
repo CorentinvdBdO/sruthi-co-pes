@@ -6,11 +6,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import re
 
-def pash_to_dataframe(lines):
+def pash_to_dataframe(path):
     """
     Takes the lines from a pash.dat file and returns a pandas Dataframe
     """
-
+    f = open(path, "r")
+    lines = f.readlines()
+    f.close()
     columns = lines[9].strip(" \n")
     columns = re.split(r"\s+", columns)
     data = pd.DataFrame(columns=columns)
@@ -37,7 +39,7 @@ def plot_surface(data, key1, key2, key3):
 
 if __name__ == "__main__":
     data = pash_to_dataframe()
-    print (data)
+    print (data["P(1)", "P(2)"])
     plot_surface(data, "P(1)", "P(2)", " Barrier")
-    print ("runned")
+    print ("ran")
 
