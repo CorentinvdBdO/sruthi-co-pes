@@ -16,6 +16,7 @@ def input_template(template_name):
     """
     source = "barrier/input_templates/"+template_name+".inp"
     shutil.copy(source, "barrier/barrier.inp")
+    return 0
 
 
 def launch_barrier ():
@@ -42,6 +43,6 @@ def change_file_name (name, new_name, in_barrier = True):
 if __name__ == "__main__":
     input_template("type2")
     launch_barrier()
-    print ("runned")
+    print ("ran")
 
 

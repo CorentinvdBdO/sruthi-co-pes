@@ -11,14 +11,15 @@ def pash_to_dataframe(lines):
     Takes the lines from a pash.dat file and returns a pandas Dataframe
     """
 
-    columns = lines[9].strip(" \n").split("  ")
-    data = pd.DataFrame(columns = columns)
+    columns = lines[9].strip(" \n")
+    columns = re.split(r"\s+", columns)
+    data = pd.DataFrame(columns=columns)
 
     for line in lines[10:]:
         line = line.strip(" \n")
-        line = re.split(r"\s{1,}",line)
+        line = re.split(r"\s+", line)
         line = np.array(line).astype(float)
-        line = pd.DataFrame([line],columns = columns)
+        line = pd.DataFrame([line], columns=columns)
         data = data.append(line)
 
     return data
