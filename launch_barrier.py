@@ -41,8 +41,7 @@ def change_file_name (name, new_name, in_barrier = True):
     return 0
 
 if __name__ == "__main__":
-    input_template("type2")
-    launch_barrier()
+    change_file_name("pash2.dat", "pash.dat")
     print ("ran")
 
 

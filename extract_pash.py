@@ -18,6 +18,10 @@ def pash_to_dataframe(path):
     data = pd.DataFrame(columns=columns)
 
     for line in lines[10:]:
+        # The following condition adds a space before - signs to avoid number concatenation
+        for i in range (len(line)):
+            if line[i] == "-":
+                line = line[:i]+" "+line[i:]
         line = line.strip(" \n")
         line = re.split(r"\s+", line)
         line = np.array(line).astype(float)
