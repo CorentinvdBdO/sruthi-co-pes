@@ -1,0 +1,6 @@
+ &INTDAT IARRAY=0,IPRINT=68,CASSIN=.t.,
+    MAPAD=.F.,OUTSPE=.f.,typerun=3 /END
+ &DYNAMC IZ=94,IN=145,ICHOIC=2,IENDD=1,epsil=0.50500D0,
+  alpha4=.025000D0,alpha6=0.000D0,VAREPS=.f.,VARP4=.f.,VARP3=.f.,
+  varp6=.t.,beg1v=-0.015D0,step1v=0.005D0,end1v=0.015D0 /END
+ 

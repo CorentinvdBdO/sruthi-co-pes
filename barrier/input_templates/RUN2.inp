@@ -1,0 +1,7 @@
+ &INTDAT IARRAY=0,IPRINT=68,CASSIN=.t.,
+    KEYSPE=1,OUTSPE=.T.,TYPERUN=2 /END
+ &DYNAMC IZ=92,IN=147,ICHOIC=2,IENDD=1,epsil=0.10D0,,alpha4=-.16D0,
+   VAREPS=.t.,
+  varp4=.t.,beg1v=0.100,step1v=0.10,end1v=0.30,
+  beg2v=-0.10,step2v=0.05,end2v=0.10 /END
+ 
