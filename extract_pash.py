@@ -9,7 +9,6 @@ import re
 def pash_to_dataframe():
     """
     Reads the file pash.dat and returns a pandas Dataframe
-    :return:
     """
     f = open("barrier/pash.dat", "r")
     lines = f.readlines()
@@ -27,9 +26,15 @@ def pash_to_dataframe():
 
     return data
 
-
+def plot_surface (data, x, y, z):
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    plt.plot(data[x], data[y], data[z])
+    plt.show
 
 if __name__ == "__main__":
-    print (pash_to_dataframe()["P(2)"])
+    data = pash_to_dataframe()
+    print (data)
+    plot_surface(data, "P(1)", "P(2)", "Barrier")
     print ("runned")
 
