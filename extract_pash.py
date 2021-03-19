@@ -6,13 +6,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import re
 
-def pash_to_dataframe():
+def pash_to_dataframe(lines):
     """
-    Reads the file pash.dat and returns a pandas Dataframe
+    Takes the lines from a pash.dat file and returns a pandas Dataframe
     """
-    f = open("barrier/pash.dat", "r")
-    lines = f.readlines()
-    f.close()
 
     columns = lines[9].strip(" \n").split("  ")
     data = pd.DataFrame(columns = columns)
