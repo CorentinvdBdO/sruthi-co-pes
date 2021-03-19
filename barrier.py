@@ -11,7 +11,7 @@ pash_data = extract_pash.pash_to_dataframe(lines)
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-plt.plot(pash_data[0], pash_data[1], pash_data[2])
+plt.plot(pash_data["P(1)"], pash_data["P(2)"], pash_data["Barrier"])
 plt.show()
 
 
