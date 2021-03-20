@@ -9,7 +9,7 @@ import re
 
 def pash_to_dataframe(path):
     """
-    Takes the lines from a pash.dat file and returns a pandas Dataframe
+    Takes the path to a pash.dat file and returns a pandas Dataframe
     """
     f = open(path, "r")
     lines = f.readlines()
