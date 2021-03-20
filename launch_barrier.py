@@ -28,14 +28,17 @@ def launch_barrier ():
     os.chdir("..")
     return 0
 
-def change_file_name (name, new_name, in_barrier = True):
+def change_file_name (name, new_name, in_barrier = True, keep_original = True):
     """
     Change file name into new_name
     Inside the barrier directory by default
     """
     if in_barrier:
         os.chdir("barrier")
-    os.rename(name,new_name)
+    if keep_original:
+        shutil.copy(name, new_name)
+    else:
+        os.rename(name, new_name)
     if in_barrier:
         os.chdir("..")
     return 0
