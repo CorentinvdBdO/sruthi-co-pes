@@ -20,7 +20,6 @@ def dataframe_to_dataset(dataframe, features, targets):
 
 
 if __name__ == "__main__":
-    print ("***********************************")
     # Get the data
     data = pash_to_dataframe("barrier/pash.dat")
     print(data)
