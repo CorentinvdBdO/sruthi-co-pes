@@ -16,7 +16,7 @@ def pash_to_dataframe(path):
     columns = lines[9].strip(" \n")
     columns = re.split(r"\s+", columns)
     dataframe = pd.DataFrame(columns=columns)
-
+    index = 0
     for line in lines[10:]:
         # The following condition adds a space before - signs to avoid number concatenation
         i=0
@@ -28,8 +28,9 @@ def pash_to_dataframe(path):
         line = line.strip(" \n")
         line = re.split(r"\s+", line)
         line = np.array(line).astype(float)
-        line = pd.DataFrame([line], columns=columns)
+        line = pd.DataFrame([line],index=[index], columns=columns)
         dataframe = dataframe.append(line)
+        index += 1
 
     return dataframe
 
