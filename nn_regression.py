@@ -19,7 +19,7 @@ def dataframe_to_dataset(dataframe, features_key, targets_key):
     return dataset
 
 def dataset_to_dataframe(dataset, features_key, labels_key):
-
+    return 0
 
 def create_datasets(path, feature_key_1, feature_key_2, target_key):
     """
@@ -50,16 +50,16 @@ def create_labels(train_dataset, test_dataset):
     test_features = test_dataset.copy()
     train_labels = train_features.pop('Barrier')
     test_labels = test_features.pop('Barrier')
-    return train_labels, test_labels
+    return train_features, train_labels, test_features,test_labels
 
-def normalize(dataset):
+def normalize(train_features):
     """
     Returns a Keras normalizer adapted to the dataset
     :param dataset: dataset
     :return: normalizer
     """
     normalizer = tf.keras.layers.experimental.preprocessing.Normalization()
-    normalizer.adapt(np.array(dataset))
+    normalizer.adapt(np.array(train_features))
     return normalizer
 
 def build_model(normalizer, layers):
@@ -71,13 +71,14 @@ def build_model(normalizer, layers):
     :return: keras model
     """
     model = tf.keras.Sequential([normalizer])
-    for i in len(layers):
+    for i in range(len(layers)):
+        neurons_no = layers[i]
         if (i==0):
-            model.add(layer.Dense(neurons_no, input_dim=2, activation='relu' ))
+            model.add(tf.keras.layers.Dense(neurons_no, input_dim=2, activation='relu' ))
         else:
-            model.add(layer.Dense(neurons_no, activation='relu'))
-    model.add(layer.Dense(1))
-
+            model.add(tf.keras.layers.Dense(neurons_no, activation='relu'))
+    model.add(tf.keras.layers.Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
 def learning_curve(model, train_features, train_labels, epoch_no):
@@ -89,10 +90,10 @@ def learning_curve(model, train_features, train_labels, epoch_no):
     :param epoch_no: int
     :return:
     """
-    model.compile(loss='mean_squared_error', optimizer='adam')
     losses = model.fit(train_features, train_labels, epochs=epoch_no).history
     epochs = np.arange(1,epoch_no,1)
-    plt.plot(epochs, losses)
+    return model
+    #plt.plot(epochs, losses)
 
 def retransform(model, test_features, test_labels):
     """
@@ -111,15 +112,13 @@ def retransform(model, test_features, test_labels):
 
 
 
-
 if __name__ == "__main__":
     # Get the data
     train_dataset, test_dataset = create_datasets("barrier/pash.dat", "P(1)", "P(2)", "Barrier")
-    train_labels, test_labels = create_labels(train_dataset, test_dataset)
-    normalizer = normalize(train_dataset)
-    model = build_model(normalizer, [500])
-
-
+    train_features, train_labels, test_features, test_labels = create_labels(train_dataset, test_dataset)
+    normalizer = normalize(train_features)
+    model = build_model(normalizer, [50])
+    model = learning_curve(model, train_features, train_labels, 200)
     # Build model
     # model = tf.keras.Sequential([normalizer,
     #     tf.keras.layers.Dense(500, input_dim=2, activation='relu'),
@@ -128,9 +127,5 @@ if __name__ == "__main__":
     # Compile model
 
     # Fit model
-
-
-    print (model.predict(train_features),train_labels )
-    plt.plot (test_labels, model.predict(test_features), ".")
+    plt.plot (test_labels, model.predict(test_features))
     plt.show()
-
