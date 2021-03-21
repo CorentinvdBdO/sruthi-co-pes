@@ -21,7 +21,7 @@ def dataframe_to_dataset(dataframe, features_key, targets_key):
 def dataset_to_dataframe(dataset, features_key, labels_key):
     return 0
 
-def create_datasets(path, feature_key_1, feature_key_2, target_key):
+def create_datasets(path, feature_key_1, feature_key_2, target_key, frac=0.5):
     """
     Takes a file and keys of interest to return two datasets - one for training and one for testing
     :param path: path to file with the output data of BARRIER
@@ -35,22 +35,13 @@ def create_datasets(path, feature_key_1, feature_key_2, target_key):
     features = [feature_key_1, feature_key_2]
     target = target_key
     dataset = data[features + [target]]
-    train_dataset = dataset.sample(frac=0.5, random_state=0)
+    train_dataset = dataset.sample(frac=frac, random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
-    return train_dataset, test_dataset
-
-def create_labels(train_dataset, test_dataset):
-    """
-    Takes training and testing datasets to return just the third column
-    :param train_dataset: dataset
-    :param test_dataset: dataset
-    :return: two datasets with the third column of entered datasets
-    """
     train_features = train_dataset.copy()
     test_features = test_dataset.copy()
-    train_labels = train_features.pop('Barrier')
-    test_labels = test_features.pop('Barrier')
-    return train_features, train_labels, test_features,test_labels
+    train_labels = train_features.pop(target)
+    test_labels = test_features.pop(target)
+    return train_dataset, test_dataset, train_features, train_labels, test_features,test_labels
 
 def normalize(train_features):
     """
@@ -114,11 +105,13 @@ def retransform(model, test_features, test_labels):
 
 if __name__ == "__main__":
     # Get the data
-    train_dataset, test_dataset = create_datasets("barrier/pash.dat", "P(1)", "P(2)", "Barrier")
-    train_features, train_labels, test_features, test_labels = create_labels(train_dataset, test_dataset)
+    train_dataset, test_dataset, \
+        train_features, train_labels, \
+        test_features, test_labels \
+        = create_datasets("barrier/pash.dat", "P(1)", "P(2)", "Barrier")
     normalizer = normalize(train_features)
-    model = build_model(normalizer, [50])
-    model = learning_curve(model, train_features, train_labels, 200)
+    model = build_model(normalizer, [500])
+    model = learning_curve(model, train_features, train_labels, 2000)
     # Build model
     # model = tf.keras.Sequential([normalizer,
     #     tf.keras.layers.Dense(500, input_dim=2, activation='relu'),
@@ -127,5 +120,5 @@ if __name__ == "__main__":
     # Compile model
 
     # Fit model
-    plt.plot (test_labels, model.predict(test_features))
+    plt.plot (test_labels, model.predict(test_features), '.')
     plt.show()
