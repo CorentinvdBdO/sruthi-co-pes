@@ -20,13 +20,13 @@ train_dataset, test_dataset, \
         = create_datasets(dataset, ["P(1)", "P(2)"], "Barrier")
 normalizer = normalize(train_features)
 model = build_model(normalizer, [100, 100, 100])
-epoch_no = 1000
+epoch_no = 2000
 history = model.fit(train_features, train_labels, epochs=epoch_no).history
 predicted_dataset = retransform(model, ["P(1)", "P(2)"], dataset)
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-plot_surface(pash_data, "P(1)", "P(2)", "Barrier", ax)
-plot_surface(predicted_dataset,"P(1)", "P(2)", "Barrier", ax)
+plot_surface(pash_data, "P(1)", "P(2)", "Barrier", ax, alpha=0.5)
+plot_surface(predicted_dataset,"P(1)", "P(2)", "Barrier", ax,alpha=0.5)
 plt.show()
 learning_curve(history)
 plt.show()

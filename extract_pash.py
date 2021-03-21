@@ -10,6 +10,7 @@ import re
 def pash_to_dataframe(path):
     """
     Takes the path to a pash.dat file and returns a pandas Dataframe
+    compatible to run type 2
     """
     f = open(path, "r")
     lines = f.readlines()
@@ -35,15 +36,20 @@ def pash_to_dataframe(path):
 
     return dataframe
 
-def plot_surface(data, key_1, key_2, key_3, ax):
+def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
     """
-        Takes the DataFrame file with the keys of interest to give x, y and z to be plotted
+        Takes the DataFrame with the keys of interest to give x, y and z to be plotted
     """
     x1 = np.linspace(data[key_1].min(), data[key_1].max(), len(data[key_1].unique()))
     y1 = np.linspace(data[key_2].min(), data[key_2].max(), len(data[key_2].unique()))
     x, y = np.meshgrid(x1, y1)
     z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
-    surf = ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False)
+    if ax is None:
+        fig = plt.figure()
+        ax = fig.gca(projection='3d')
+        ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
+    else:
+        ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
 
 
 if __name__ == "__main__":
