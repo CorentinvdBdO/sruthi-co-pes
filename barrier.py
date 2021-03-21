@@ -12,15 +12,15 @@ from nn_regression import create_datasets, normalize, build_model, learning_curv
 #input_template("step3")
 #launch_barrier()
 #change_file_name("pash.dat", "pash_step3new.dat")
-dataset = pash_to_dataframe("barrier/pash_step3new.dat")
+dataset = pash_to_dataframe("barrier/large_pash.dat")
 features = ["P(1)", "P(2)"]
 train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets(dataset, features, "Barrier")
+        = create_datasets(dataset, features, "Barrier", frac=0.1)
 normalizer = normalize(train_features)
 model = build_model(normalizer, [100, 100, 100])
-epoch_no = 2000
+epoch_no = 1000
 history = model.fit(train_features, train_labels, epochs=epoch_no).history
 predicted_labels = model.predict(dataset[features])
 predicted_dataset = retransform(dataset[features], predicted_labels)
