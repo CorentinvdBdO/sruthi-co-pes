@@ -52,6 +52,7 @@ def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
         ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
 
 
+
 if __name__ == "__main__":
     data = pash_to_dataframe("barrier/pash_step3.dat")
     print (data.columns)

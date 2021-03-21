@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from extract_pash import pash_to_dataframe
+from extract_pash import pash_to_dataframe, plot_surface
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -82,21 +82,18 @@ def learning_curve(history):
     epochs = np.arange(1,len(losses)+1,1)
     plt.plot(epochs, losses)
 
-def retransform(model, features, data):
+def retransform(dataset, predicted_labels):
     """
-    Takes trained model and dataset to predict values for all features
-    :param model: model
-    :param features: dataset
-    :param labels: dataset
-    :return: x, y, z to plot
+    Takes the featers and predicted targets and makes one dataframe
     """
-    data_features = data[features]
-    predicted_labels = model.predict(data_features)
-    print(pd.DataFrame(predicted_labels, columns=['Barrier']))
-    print(data_features)
-    predicted_dataset = data_features.join(pd.DataFrame(predicted_labels, columns = ['Barrier']))
-    return predicted_dataset
+    retransformed_dataset = dataset.join(pd.DataFrame(predicted_labels, columns = ['Barrier']))
+    return retransformed_dataset
 
+def plot_surface_diff(data1,data2, key1, key2, key3, ax = None):
+    diff = data1[key3] - data2[key3]
+    data_diff = retransform(data1[[key1,key2]],diff)
+    plot_surface(data_diff, key1, key2, key3, ax)
+    return 0
 
 if __name__ == "__main__":
     # Get the data
