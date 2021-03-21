@@ -1,7 +1,7 @@
 from nn_regression import create_datasets, normalize, build_model, learning_curve, retransform
 import numpy as np
 from extract_pash import pash_to_dataframe, plot_surface
-
+import matplotlib.pyplot as plt
 
 class Committee:
     def __init__(self, models_number):
@@ -10,10 +10,22 @@ class Committee:
     def build_model(self, normalizer, layers):
         for i in range (self.models_number):
             self.models += [build_model(normalizer, layers)]
-    def fit(self, train_features, train_labels, epochs, verbose = 1):
+    def fit(self, train_features, train_labels, epochs, verbose = 1, split_train = False):
         history_list = []
+        if split_train:
+            n = len(train_features)//self.models_number
         for model in self.models:
-            history_list += [model.fit(train_features, train_labels, epochs, verbose)]
+            print("train model")
+            if split_train:
+                train_features_spec = train_features.sample(n=n)
+                indexes = train_features_spec.index
+                train_labels_spec = train_labels[indexes]
+                train_features = train_features.drop(indexes)
+                train_labels = train_labels.drop(indexes)
+            else:
+                train_features_spec = train_features
+                train_labels_spec = train_labels
+            history_list += [model.fit(train_features_spec, train_labels_spec, epochs=epochs, verbose=verbose)]
         return history_list
     def retransform (self, features, data):
         predicted_dataset_list = []
@@ -26,17 +38,27 @@ class Committee:
             list_prediction += [model.predict(data_features)]
         return list_prediction
 
+def get_mean_var(list_prediction):
+    mean_list = np.mean(list_prediction, 0)
+    var_list = np.var(list_prediction, 0)
+    return mean_list, var_list
 if __name__ == "__main__":
-    dataset = pash_to_dataframe("barrier/pash_step3new.dat")
+    features = ["P(1)", "P(2)"]
+    dataset = pash_to_dataframe("barrier/large_pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(dataset, ["P(1)", "P(2)"], "Barrier")
+        = create_datasets(dataset, features, "Barrier", frac=0.1)
 
     Committee = Committee(5)
 
     normalizer = normalize(train_features)
     Committee.build_model(normalizer, [100,100,100])
-    Committee.fit(train_features, train_labels, 500)
-    list_prediction = Committee.predict(test_features)
-    print(np.mean(list_prediction)
+    Committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=True)
+    list_prediction = Committee.predict(dataset[features])
+    predicted_target, variance = get_mean_var(list_prediction)
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    predicted_dataset = retransform(dataset[features], variance)
+    plot_surface(predicted_dataset, features[0], features[1], "Barrier", ax)
+    plt.show()
