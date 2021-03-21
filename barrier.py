@@ -10,8 +10,8 @@ from nn_regression import create_datasets, normalize, build_model, learning_curv
 
 
 input_template("step3")
-launch_barrier()
-change_file_name("pash.dat", "pash_step3new.dat")
+#launch_barrier()
+#change_file_name("pash.dat", "pash_step3new.dat")
 pash_data = pash_to_dataframe("barrier/pash_step3new.dat")
 dataset = pash_to_dataframe("barrier/pash_step3new.dat")
 train_dataset, test_dataset, \
