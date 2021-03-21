@@ -21,7 +21,7 @@ def dataframe_to_dataset(dataframe, features_key, targets_key):
 def dataset_to_dataframe(dataset, features_key, labels_key):
     return 0
 
-def create_datasets(path, feature_key_1, feature_key_2, target_key, frac=0.5):
+def create_datasets(path, features, target, frac=0.5):
     """
     Takes a file and keys of interest to return two datasets - one for training and one for testing
     :param path: path to file with the output data of BARRIER
@@ -32,8 +32,6 @@ def create_datasets(path, feature_key_1, feature_key_2, target_key, frac=0.5):
     and a test dataset
     """
     data = pash_to_dataframe(path)
-    features = [feature_key_1, feature_key_2]
-    target = target_key
     dataset = data[features + [target]]
     train_dataset = dataset.sample(frac=frac, random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
@@ -108,7 +106,7 @@ if __name__ == "__main__":
     train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets("barrier/pash.dat", "P(1)", "P(2)", "Barrier")
+        = create_datasets("barrier/pash.dat", ["P(1)", "P(2)"], "Barrier")
     normalizer = normalize(train_features)
     model = build_model(normalizer, [500])
     model = learning_curve(model, train_features, train_labels, 2000)
