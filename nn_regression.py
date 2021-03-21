@@ -70,19 +70,16 @@ def build_model(normalizer, layers):
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
-def learning_curve(model, train_features, train_labels, epoch_no):
+def learning_curve(history, epoch_no):
     """
-    Takes a model, training features and labels and number of epochs to train the network
-    :param model: model
-    :param features: dataset
-    :param labels: labels
+    Takes the losses during different epochs, and number of epochs to plot learning curve
+    :param losses: History.history
     :param epoch_no: int
     :return:
     """
-    losses = model.fit(train_features, train_labels, epochs=epoch_no).history
+    losses = history['loss']
     epochs = np.arange(1,epoch_no,1)
-    return model
-    #plt.plot(epochs, losses)
+    plt.plot(epochs, losses)
 
 def retransform(model, test_features, test_labels):
     """
@@ -93,8 +90,10 @@ def retransform(model, test_features, test_labels):
     :return: x, y, z to plot
     """
     predicted_labels = model.predict(test_features)
-    y = test_features.pop('P(2)')
-    x = test_features
+    y1 = test_features.pop('P(2)')
+    x2 = test_features
+    x, y = np.meshgrid(x1, y1)
+
 
 
 
