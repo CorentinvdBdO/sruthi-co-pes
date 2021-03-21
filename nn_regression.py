@@ -81,18 +81,20 @@ def learning_curve(history, epoch_no):
     epochs = np.arange(1,epoch_no,1)
     plt.plot(epochs, losses)
 
-def retransform(model, test_features, test_labels):
+def retransform(model, features, data):
     """
-    Takes trained model to predict values for test features
+    Takes trained model and dataset to predict values for all features
     :param model: model
     :param features: dataset
     :param labels: dataset
     :return: x, y, z to plot
     """
-    predicted_labels = model.predict(test_features)
-    y1 = test_features.pop('P(2)')
-    x2 = test_features
-    x, y = np.meshgrid(x1, y1)
+    data_features = data[features]
+    predicted_labels = model.predict(data_features)
+    print(pd.DataFrame(predicted_labels, columns=['Barrier']))
+    print(data_features)
+    predicted_dataset = data_features.join(pd.DataFrame(predicted_labels, columns = ['Barrier']))
+    return predicted_dataset
 
 
 
