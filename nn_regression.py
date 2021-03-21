@@ -1,7 +1,9 @@
 import tensorflow as tf
 import numpy as np
-from extract_pash import pash_to_dataframe
+from extract_pash import pash_to_dataframe, plot_surface
+from scipy.interpolate import griddata
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
 from launch_barrier import launch_barrier, input_template
 
@@ -21,9 +23,9 @@ def dataframe_to_dataset(dataframe, features_key, targets_key):
 def dataset_to_dataframe(dataset, features_key, labels_key):
     return 0
 
-def create_datasets(path, features, target, frac=0.5):
+def create_datasets(data, features, target, frac=0.5):
     """
-    Takes a file and keys of interest to return two datasets - one for training and one for testing
+    Takes a dataset and keys of interest to return two datasets - one for training and one for testing
     :param path: path to file with the output data of BARRIER
     :param feature_key_1: str key of first parameter x
     :param feature_key_2: str key of second parameter y
@@ -31,7 +33,6 @@ def create_datasets(path, features, target, frac=0.5):
     :return: dataset consisting of columns given by x, y and z seperated randomly into a training dataset
     and a test dataset
     """
-    data = pash_to_dataframe(path)
     dataset = data[features + [target]]
     train_dataset = dataset.sample(frac=frac, random_state=0)
     test_dataset = dataset.drop(train_dataset.index)
@@ -70,7 +71,7 @@ def build_model(normalizer, layers):
     model.compile(loss='mean_squared_error', optimizer='adam')
     return model
 
-def learning_curve(history, epoch_no):
+def learning_curve(history):
     """
     Takes the losses during different epochs, and number of epochs to plot learning curve
     :param losses: History.history
@@ -78,21 +79,26 @@ def learning_curve(history, epoch_no):
     :return:
     """
     losses = history['loss']
-    epochs = np.arange(1,epoch_no,1)
+    epochs = np.arange(1,len(losses)+1,1)
     plt.plot(epochs, losses)
 
-def retransform(model, test_features, test_labels):
+def retransform(model, features, data):
     """
-    Takes trained model to predict values for test features
+    Takes trained model and dataset to predict values for all features
     :param model: model
     :param features: dataset
     :param labels: dataset
     :return: x, y, z to plot
     """
-    predicted_labels = model.predict(test_features)
-    y1 = test_features.pop('P(2)')
-    x2 = test_features
-    x, y = np.meshgrid(x1, y1)
+    data_features = data[features]
+    predicted_labels = model.predict(data_features)
+    print(pd.DataFrame(predicted_labels, columns=['Barrier']))
+    print(data_features)
+    predicted_dataset = data_features.join(pd.DataFrame(predicted_labels, columns = ['Barrier']))
+    return predicted_dataset
+
+
+
 
 
 
@@ -102,13 +108,17 @@ def retransform(model, test_features, test_labels):
 
 if __name__ == "__main__":
     # Get the data
+    dataset = pash_to_dataframe("barrier/pash_step3new.dat")
     train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets("barrier/pash.dat", ["P(1)", "P(2)"], "Barrier")
+        = create_datasets(dataset, ["P(1)", "P(2)"], "Barrier")
     normalizer = normalize(train_features)
     model = build_model(normalizer, [500])
-    model = learning_curve(model, train_features, train_labels, 2000)
+    epoch_no = 2000
+    history = model.fit(train_features, train_labels, epochs=epoch_no).history
+    learning_curve(history)
+    retransform(model, ["P(1)", "P(2)"], dataset)
     # Build model
     # model = tf.keras.Sequential([normalizer,
     #     tf.keras.layers.Dense(500, input_dim=2, activation='relu'),
@@ -117,5 +127,5 @@ if __name__ == "__main__":
     # Compile model
 
     # Fit model
-    plt.plot (test_labels, model.predict(test_features), '.')
+    #plt.plot (test_labels, model.predict(test_features), '.')
     plt.show()

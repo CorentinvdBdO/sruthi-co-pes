@@ -35,7 +35,7 @@ def pash_to_dataframe(path):
 
     return dataframe
 
-def plot_surface(data, key_1, key_2, key_3):
+def plot_surface(data, key_1, key_2, key_3, ax):
     """
         Takes the DataFrame file with the keys of interest to give x, y and z to be plotted
     """
@@ -43,8 +43,6 @@ def plot_surface(data, key_1, key_2, key_3):
     y1 = np.linspace(data[key_2].min(), data[key_2].max(), len(data[key_2].unique()))
     x, y = np.meshgrid(x1, y1)
     z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
     surf = ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False)
 
 
