@@ -3,6 +3,7 @@ import numpy as np
 from extract_pash import pash_to_dataframe, plot_surface
 import matplotlib.pyplot as plt
 
+
 class Committee:
     def __init__(self, models_number):
         self.models_number = models_number
