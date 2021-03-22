@@ -97,7 +97,7 @@ def plot_heatmap(data, key_1, key_2, key_3, ax = None, colorbar = True, cmap="ho
         if colorbar:
             ax.colorbar()
 
-def plot_contour(data, key_1, key_2, key_3, ax = None):
+def plot_contour(data, key_1, key_2, key_3, levels=6, ax = None, cmap="hot", colorbar=True):
     """
     Plot a contour graph of the input data
     :param data: a DataFrame
@@ -112,20 +112,24 @@ def plot_contour(data, key_1, key_2, key_3, ax = None):
     x, y = np.meshgrid(x, y)
     z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
     if ax is None:
-        plt.contour(x,y,z)
+        plt.contourf(x,y,z, levels=levels, cmap=cmap)
         plt.xlabel(key_1)
         plt.ylabel(key_2)
+        if colorbar:
+            plt.colorbar()
     else :
-        ax.contour(x,y,z)
+        ax.contourf(x,y,z, levels=levels, cmap=cmap)
         ax.xlabel(key_1)
         ax.ylabel(key_2)
+        if colorbar:
+            plt.colorbar()
 
 if __name__ == "__main__":
     #input_template("step3")
     #launch_barrier()
-    data = pash_to_dataframe("barrier/pash.dat")
+    data = pash_to_dataframe("barrier/large_pash.dat")
     print (data)
-    plot_contour(data, "epsilon", "a3", "Barrier")
+    plot_contour(data, "epsilon", "a3", "Barrier", levels=15)
     plt.show()
     print ("ran")
 
