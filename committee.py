@@ -1,6 +1,6 @@
 from nn_regression import create_datasets, normalize, build_model, learning_curve, retransform
 import numpy as np
-from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap
+from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_contour, plot_points
 import matplotlib.pyplot as plt
 
 
@@ -46,25 +46,67 @@ def get_mean_var(list_prediction):
     var_list = np.var(list_prediction, 0)
     return mean_list, var_list
 
-def get_histo (Committee, point_features):
+def plot_histo (Committee, point_features, expected_value, ax=plt.gca()):
+    predicted_list = np.ravel(Committee.predict(point_features))
+    n, b, p= plt.hist(predicted_list)
+    ax.vlines(expected_value, 0, max(n), colors="r")
     return 0
+
+
+
+class HistOnClick:
+    def __init__(self, ax1, ax2, Committee, data, features, target):
+        self.Committee = Committee
+        self.ax1 = ax1
+        self.ax2 = ax2
+        self.ax1.figure.canvas.mpl_connect('button_press_event', self.on_click)
+
+        self.data = data
+        self.features = features
+        self.target = target
+    def on_click (self, event):
+        features = self.features
+        target = self.target
+        coord = np.array([event.xdata, event.ydata])
+        index = 0
+        norm = 1000
+        for i in range(len(data)):
+            point_features = data.loc[[i], features]
+            newnorm = np.linalg.norm(point_features-coord)
+            if newnorm < norm :
+                norm = newnorm
+                index = i
+        self.ax1.set_data(data.loc[[index], features[0]], data.loc[[index], features[1]])
+        point_features = data.loc[[index], features]
+        expected_value = data.loc[[index], target]
+        self.ax2.cla()
+        plot_histo(Committee, point_features, expected_value, self.ax2)
+        self.ax2.figure.canvas.draw()
+
 
 
 if __name__ == "__main__":
     features = ["epsilon", "a3"]
-    dataset = pash_to_dataframe("barrier/large_pash.dat")
+    data = pash_to_dataframe("barrier/large_pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(dataset, features, "Barrier", frac=0.05)
+        = create_datasets(data, features, "Barrier", frac=0.1)
 
-    Committee = Committee(5)
+    Committee = Committee(100)
 
     normalizer = normalize(train_features)
-    Committee.build_model(normalizer, [100,100,100])
-    Committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=True)
-    list_prediction = Committee.predict(dataset[features])
+    Committee.build_model(normalizer, [100, 100, 100])
+    Committee.fit(train_features, train_labels, epochs=1000, verbose=0, split_train=True)
+    #plot_histo(Committee, test_dataset.loc[[11],features], test_dataset.loc[[11],"Barrier"])
+    #plt.show()
+    list_prediction = Committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
-    predicted_dataset = retransform(dataset[features], variance)
-    plot_heatmap(predicted_dataset, features[0], features[1], "Barrier")
+    predicted_data = retransform(data[features], variance)
+
+    fig, (ax1,ax2)= plt.subplots(1,2)
+    pointer, = ax1.plot([0], [0], "+")
+    object = HistOnClick(pointer, ax2, Committee, data, features, "Barrier")
+    plot_contour(predicted_data, features[0], features[1], "Barrier", colorbar=True, ax=ax1)
+    plot_points(train_dataset, features, ax1)
     plt.show()

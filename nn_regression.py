@@ -109,7 +109,8 @@ if __name__ == "__main__":
     train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets(data, ["epsilon", "a3"], "Barrier")
+        = create_datasets(data, ["epsilon", "a3"], "Barrier", frac=0.5)
+    print(train_dataset, data, test_dataset)
     normalizer = normalize(train_features)
     model = build_model(normalizer, [500])
     history = model.fit(train_features, train_labels, epochs=1000).history

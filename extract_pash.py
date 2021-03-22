@@ -3,6 +3,7 @@ takes the pash.dat file and turns it into manageable data
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import ticker
 from scipy.interpolate import griddata
 import pandas as pd
 import re
@@ -97,7 +98,7 @@ def plot_heatmap(data, key_1, key_2, key_3, ax = None, colorbar = True, cmap="ho
         if colorbar:
             ax.colorbar()
 
-def plot_contour(data, key_1, key_2, key_3, levels=6, ax = None, cmap="hot", colorbar=True):
+def plot_contour(data, key_1, key_2, key_3, levels=6, ax=plt.gca(), cmap="hot", colorbar=True):
     """
     Plot a contour graph of the input data
     :param data: a DataFrame
@@ -111,26 +112,24 @@ def plot_contour(data, key_1, key_2, key_3, levels=6, ax = None, cmap="hot", col
     y = np.linspace(data[key_2].min(), data[key_2].max(), len(data[key_2].unique()))
     x, y = np.meshgrid(x, y)
     z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
-    if ax is None:
-        plt.contourf(x,y,z, levels=levels, cmap=cmap)
-        plt.xlabel(key_1)
-        plt.ylabel(key_2)
-        if colorbar:
-            plt.colorbar()
-    else :
-        ax.contourf(x,y,z, levels=levels, cmap=cmap)
-        ax.xlabel(key_1)
-        ax.ylabel(key_2)
-        if colorbar:
-            plt.colorbar()
+
+    img = ax.contourf(x,y,z, levels=levels, cmap=cmap)
+    ax.set_xlabel(key_1)
+    ax.set_ylabel(key_2)
+    if colorbar:
+        plt.colorbar(img, label=key_3, ax=ax)
+
+def plot_points(data, features, ax=plt.gca()):
+
+    ax.plot(data[features[0]], data[features[1]], '.')
 
 if __name__ == "__main__":
     #input_template("step3")
     #launch_barrier()
-    data = pash_to_dataframe("barrier/large_pash.dat")
+    data = pash_to_dataframe("barrier/pash.dat")
     print (data)
-    plot_contour(data, "epsilon", "a3", "Barrier", levels=15)
+    plot_contour(data, "epsilon", "a3", "Barrier", levels=40)
     plt.show()
-    print ("ran")
+    print("ran")
 
 
