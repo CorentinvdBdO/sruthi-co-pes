@@ -10,7 +10,7 @@ from nn_regression import create_datasets, normalize, build_model, learning_curv
 
 
 input_template("type2")
-launch_barrier()
+#launch_barrier()
 #change_file_name("pash.dat", "pash_step3new.dat")
 dataset = pash_to_dataframe("barrier/pash.dat")
 features = ["epsilon", "a3"]
