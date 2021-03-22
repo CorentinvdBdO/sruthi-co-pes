@@ -5,10 +5,6 @@ import subprocess
 import os
 import shutil
 
-def input_change ():
-    """
-    Change the parameters from barrier.inp
-    """
 
 def input_template(template_name):
     """
