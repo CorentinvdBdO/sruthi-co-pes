@@ -5,14 +5,12 @@ import subprocess
 import os
 import shutil
 
-def input_change ():
-    """
-    Change the parameters from barrier.inp
-    """
 
 def input_template(template_name):
     """
-    Change barrier.inp to a template
+    Change barrier.inp to a template from barrier/template
+    available templates: RUN1, RUN2, RUN3, RUN4, step3, test, type1, type2
+    :param template_name: str name, no path, no .dat
     """
     source = "barrier/input_templates/"+template_name+".inp"
     shutil.copy(source, "barrier/barrier.inp")
@@ -32,6 +30,11 @@ def change_file_name (name, new_name, in_barrier = True, keep_original = True):
     """
     Change file name into new_name
     Inside the barrier directory by default
+    :param name: old file name
+    :param new_name: new file name
+    :param in_barrier: if True, will operate in barrier/
+    :param keep_original: if True, will not delete the original file
+    :return:
     """
     if in_barrier:
         os.chdir("barrier")
