@@ -1,6 +1,6 @@
 from nn_regression import create_datasets, normalize, build_model, learning_curve, retransform
 import numpy as np
-from extract_pash import pash_to_dataframe, plot_surface
+from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap
 import matplotlib.pyplot as plt
 
 
@@ -15,10 +15,11 @@ class Committee:
         history_list = []
         if split_train:
             n = len(train_features)//self.models_number
+        i = 0
         for model in self.models:
-            print("train model")
+            print("train model "+str(i+1)+"/"+str(self.models_number))
             if split_train:
-                train_features_spec = train_features.sample(n=n)
+                train_features_spec = train_features.sample(frac=1/(self.models_number-i))
                 indexes = train_features_spec.index
                 train_labels_spec = train_labels[indexes]
                 train_features = train_features.drop(indexes)
@@ -27,6 +28,7 @@ class Committee:
                 train_features_spec = train_features
                 train_labels_spec = train_labels
             history_list += [model.fit(train_features_spec, train_labels_spec, epochs=epochs, verbose=verbose)]
+            i += 1
         return history_list
     def retransform (self, features, data):
         predicted_dataset_list = []
@@ -43,13 +45,18 @@ def get_mean_var(list_prediction):
     mean_list = np.mean(list_prediction, 0)
     var_list = np.var(list_prediction, 0)
     return mean_list, var_list
+
+def get_histo (Committee, point_features):
+
+
+
 if __name__ == "__main__":
     features = ["P(1)", "P(2)"]
     dataset = pash_to_dataframe("barrier/large_pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(dataset, features, "Barrier", frac=0.1)
+        = create_datasets(dataset, features, "Barrier", frac=0.05)
 
     Committee = Committee(5)
 
@@ -58,8 +65,6 @@ if __name__ == "__main__":
     Committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=True)
     list_prediction = Committee.predict(dataset[features])
     predicted_target, variance = get_mean_var(list_prediction)
-    fig = plt.figure()
-    ax = fig.gca(projection='3d')
     predicted_dataset = retransform(dataset[features], variance)
-    plot_surface(predicted_dataset, features[0], features[1], "Barrier", ax)
+    plot_heatmap(predicted_dataset, features[0], features[1], "Barrier")
     plt.show()

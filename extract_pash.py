@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 import pandas as pd
 import re
+from launch_barrier import launch_barrier, input_template
 
 def pash_to_dataframe(path):
     """
@@ -51,11 +52,39 @@ def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
     else:
         ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
 
+def plot_heatmap(data, key_1, key_2, key_3, ax = None, colorbar = True, cmap="hot"):
+    """
+        Takes the DataFrame with the keys of interest to give x, y and z to be plotted
+    """
+    x1 = np.linspace(data[key_1].min(), data[key_1].max(), len(data[key_1].unique()))
+    y1 = np.linspace(data[key_2].min(), data[key_2].max(), len(data[key_2].unique()))
+    x, y = np.meshgrid(x1, y1)
+    z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
+    if ax is None:
+        plt.imshow(z, cmap=cmap)
+        if colorbar:
+            plt.colorbar()
+    else:
+        ax.imshow(z,cmap=cmap)
+        if colorbar:
+            ax.colorbar()
 
+def plot_contour(data, key_1, key_2, key_3, ax = None):
+    x = np.linspace(data[key_1].min(), data[key_1].max(), len(data[key_1].unique()))
+    y = np.linspace(data[key_2].min(), data[key_2].max(), len(data[key_2].unique()))
+    x, y = np.meshgrid(x, y)
+    z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
+    if ax is None:
+        plt.contour(x,y,z)
+    else :
+        ax.contour(x,y,z)
 
 if __name__ == "__main__":
-    data = pash_to_dataframe("barrier/pash_step3.dat")
-    print (data.columns)
-    plot_surface(data, "P(1)", "P(2)", "Barrier")
+    #input_template("step3")
+    #launch_barrier()
+    data = pash_to_dataframe("barrier/pash.dat")
+    plot_contour(data, "P(1)", "P(2)", "Barrier")
+    plt.show()
     print ("ran")
+
 
