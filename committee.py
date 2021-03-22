@@ -53,29 +53,51 @@ def plot_histo (Committee, point_features, expected_value, ax=plt.gca()):
     return 0
 
 
-
 class HistOnClick:
-    def __init__(self, ax1, ax2, Committee, data, features, target):
+    def __init__(self, ax1, ax2, Committee, data, features, target, in_order = True):
         self.Committee = Committee
         self.ax1 = ax1
         self.ax2 = ax2
         self.ax1.figure.canvas.mpl_connect('button_press_event', self.on_click)
 
+        self.in_order = in_order
         self.data = data
         self.features = features
         self.target = target
+
+        index = 0
+        diff = 1
+        while diff > 0:
+            diff = data.loc[index+1, features[1]]-data.loc[index, features[1]]
+            index += 1
+        lent = len(data)
+        self.min1 = data.loc[0,features[0]]
+        max1 = data.loc[lent-1, features[0]]
+        self.min2 = data.loc[0,features[1]]
+        len2 = index
+        len1 = lent // index
+        self.len2 = len2
+        max2 = data.loc[len2 - 1, features[1]]
+        self.step1 = (max1 - self.min1 ) / len1
+        self.step2 = (max2 - self.min2 ) / len2
     def on_click (self, event):
         features = self.features
         target = self.target
         coord = np.array([event.xdata, event.ydata])
-        index = 0
-        norm = 1000
-        for i in range(len(data)):
-            point_features = data.loc[[i], features]
-            newnorm = np.linalg.norm(point_features-coord)
-            if newnorm < norm :
-                norm = newnorm
-                index = i
+        if self.in_order is False:
+            index = 0
+            norm = 1000
+            for i in range(len(data)):
+                point_features = data.loc[[i], features]
+                newnorm = np.linalg.norm(point_features-coord)
+                if newnorm < norm :
+                    norm = newnorm
+                    index = i
+        else:
+            pos1 = (coord[0] - self.min1 )//self.step1 - 1
+            pos2 = (coord[1] - self.min2 )//self.step2 - 1
+            index = int(pos1*self.len2 + pos2)
+
         self.ax1.set_data(data.loc[[index], features[0]], data.loc[[index], features[1]])
         point_features = data.loc[[index], features]
         expected_value = data.loc[[index], target]
@@ -93,7 +115,7 @@ if __name__ == "__main__":
     test_features, test_labels \
         = create_datasets(data, features, "Barrier", frac=0.1)
 
-    Committee = Committee(100)
+    Committee = Committee(4)
 
     normalizer = normalize(train_features)
     Committee.build_model(normalizer, [100, 100, 100])
@@ -102,7 +124,7 @@ if __name__ == "__main__":
     #plt.show()
     list_prediction = Committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
-    predicted_data = retransform(data[features], variance)
+    predicted_data = retransform(data[features], predicted_target)
 
     fig, (ax1,ax2)= plt.subplots(1,2)
     pointer, = ax1.plot([0], [0], "+")
