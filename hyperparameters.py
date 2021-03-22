@@ -34,7 +34,7 @@ def rmse_test(model, train_features, train_labels, test_features, test_labels, e
     losses = []
     losses_test = []
     for i in range(epoch_no):
-        history = model.fit(train_features, train_labels, epochs=epoch_no).history
+        history = model.fit(train_features, train_labels, epochs=epoch_no, batch_size=n_batch).history
         losses.append(history['loss'])
         predicted_labels = model.predict(test_features)
         losses_test.append(calculate_rmse(predicted_labels, test_labels))
@@ -74,33 +74,50 @@ def hyperparameter_analysis(dataset, n_layers=3, n_neurons_per_layer=100, n_batc
         for i in range(len(n_layers)):
             layers.append((np.ones(n_layers[i])*n_neurons_per_layer).tolist())
             models.append(build_model(normalizer, layers[i], n_batch))
-            loss, loss_test = rmse_test(models[i], train_features, train_labels, test_features, test_labels, n_epochs)
+            loss, loss_test = rmse_test(models[i], train_features, train_labels, test_features, test_labels, n_epochs, n_batch)
             losses.append(loss)
             losses_test.append(loss_test)
+
     elif type(n_neurons_per_layer) == 'list':
         layers = []
         for i in range(n_layers):
             layers.append((np.ones(n_layers)*n_neurons_per_layer[i]).tolist())
-            models.append(build_model(normalizer, layers[i], n_batch))
-            loss, loss_test = rmse_test(models[i], train_features, train_labels, test_features, test_labels, n_epochs)
+            models.append(build_model(normalizer, layers[i]))
+            loss, loss_test = rmse_test(models[i], train_features, train_labels, test_features, test_labels, n_epochs, n_batch)
             losses.append(loss)
             losses_test.append(loss_test)
+
     elif type(n_batch) == 'list':
         for i in range(len(n_batch)):
-            models.append(build_model(normalizer, default_layers, n_batch[i]))
-            loss, loss_test = rmse_test(models[i], train_features, train_labels, test_features, test_labels, n_epochs)
+            loss, loss_test = rmse_test(default_model, train_features, train_labels, test_features, test_labels, n_epochs, n_batch[i])
             losses.append(loss)
             losses_test.append(loss_test)
+
     elif type(n_epochs)=='list':
         for i in range(len(n_epochs)):
+            loss, loss_test = rmse_test(default_model, train_features, train_labels, test_features, test_labels,
+                                        n_epochs[i], n_batch)
+            losses.append(loss)
+            losses_test.append(loss_test)
 
+    elif type(activation)=='list':
+        for i in range(len(activation)):
+            models.append(build_model(normalizer, default_layers, activation=activation[i]))
+            loss, loss_test = rmse_test(default_model, train_features, train_labels, test_features, test_labels,
+                                        n_epochs, n_batch)
+            losses.append(loss)
+            losses_test.append(loss_test)
 
+    elif type(optimizer)=='list':
+        for i in range(len(optimizer)):
+            models.append(build_model(normalizer, default_layers, optimizer=optimizer[i]))
+            loss, loss_test = rmse_test(default_model, train_features, train_labels, test_features, test_labels,
+                                        n_epochs, n_batch)
+            losses.append(loss)
+            losses_test.append(loss_test)
 
+    return losses, losses_test
 
-
-
-
-    return min_losses
 
 
 
