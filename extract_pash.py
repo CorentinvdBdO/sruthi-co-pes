@@ -66,9 +66,10 @@ def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
     if ax is None:
         fig = plt.figure()
         ax = fig.gca(projection='3d')
-        ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
-    else:
-        ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
+    ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
+    ax.set_xlabel(key_1)
+    ax.set_ylabel(key_2)
+    ax.set_zlabel(key_3)
 
 def plot_heatmap(data, key_1, key_2, key_3, ax = None, colorbar = True, cmap="hot"):
     """
@@ -112,8 +113,12 @@ def plot_contour(data, key_1, key_2, key_3, ax = None):
     z = griddata((data[key_1], data[key_2]), data[key_3], (x, y), method='cubic')
     if ax is None:
         plt.contour(x,y,z)
+        plt.xlabel(key_1)
+        plt.ylabel(key_2)
     else :
         ax.contour(x,y,z)
+        ax.xlabel(key_1)
+        ax.ylabel(key_2)
 
 if __name__ == "__main__":
     #input_template("step3")

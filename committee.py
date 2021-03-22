@@ -47,7 +47,7 @@ def get_mean_var(list_prediction):
     return mean_list, var_list
 
 def get_histo (Committee, point_features):
-
+    return 0
 
 
 if __name__ == "__main__":
