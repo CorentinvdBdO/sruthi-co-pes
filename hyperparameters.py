@@ -34,13 +34,13 @@ def rmse_test(model, train_features, train_labels, test_features, test_labels, e
     losses = []
     losses_test = []
     for i in range(epoch_no):
-        history = model.fit(train_features, train_labels, epochs=epoch_no, batch_size=n_batch).history
+        history = model.fit(train_features, train_labels, epochs=1, batch_size=n_batch).history
         losses.append(history['loss'])
         predicted_labels = model.predict(test_features)
         losses_test.append(calculate_rmse(predicted_labels, test_labels))
     return losses, losses_test
 
-def hyperparameter_analysis(dataset, n_layers=3, n_neurons_per_layer=100, n_batch=10, n_epochs=2000, activation='relu', optimizer='adam'):
+def hyperparameter_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, n_batch=10, n_epochs=2000, activation='relu', optimizer='adam'):
     """
     Takes the name of hyperparameter and a list with the values for this hyperparameter or
     a string list for activation functions an loss optimizers (default values for the rest)
@@ -54,7 +54,6 @@ def hyperparameter_analysis(dataset, n_layers=3, n_neurons_per_layer=100, n_batc
     :param optimizer: default or str list
     :return: float list
     """
-    features = ["P(1)", "P(2)"]
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
