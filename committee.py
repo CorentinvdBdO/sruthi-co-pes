@@ -64,22 +64,22 @@ class HistOnClick:
         self.data = data
         self.features = features
         self.target = target
-
-        index = 0
-        diff = 1
-        while diff > 0:
-            diff = data.loc[index+1, features[1]]-data.loc[index, features[1]]
-            index += 1
-        lent = len(data)
-        self.min1 = data.loc[0,features[0]]
-        max1 = data.loc[lent-1, features[0]]
-        self.min2 = data.loc[0,features[1]]
-        len2 = index
-        len1 = lent // index
-        self.len2 = len2
-        max2 = data.loc[len2 - 1, features[1]]
-        self.step1 = (max1 - self.min1 ) / len1
-        self.step2 = (max2 - self.min2 ) / len2
+        if in_order is True:
+            index = 0
+            diff = 1
+            while diff > 0:
+                diff = data.loc[index+1, features[1]]-data.loc[index, features[1]]
+                index += 1
+            lent = len(data)
+            self.min1 = data.loc[0,features[0]]
+            max1 = data.loc[lent-1, features[0]]
+            self.min2 = data.loc[0,features[1]]
+            len2 = index
+            len1 = lent // index
+            self.len2 = len2
+            max2 = data.loc[len2 - 1, features[1]]
+            self.step1 = (max1 - self.min1 ) / len1
+            self.step2 = (max2 - self.min2 ) / len2
     def on_click (self, event):
         features = self.features
         target = self.target
