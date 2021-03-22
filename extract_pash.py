@@ -8,7 +8,7 @@ import pandas as pd
 import re
 from launch_barrier import launch_barrier, input_template
 
-def pash_to_dataframe(path):
+def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3"):
     """
     Takes the path to a pash.dat file and returns a pandas Dataframe
     compatible to run type 2
@@ -18,6 +18,9 @@ def pash_to_dataframe(path):
     f.close()
     columns = lines[9].strip(" \n")
     columns = re.split(r"\s+", columns)
+    columns = np.array(columns)
+    columns[columns == "P(1)"] = new_P1
+    columns[columns == "P(2)"] = new_P2
     dataframe = pd.DataFrame(columns=columns)
     index = 0
     for line in lines[10:]:
@@ -83,7 +86,8 @@ if __name__ == "__main__":
     #input_template("step3")
     #launch_barrier()
     data = pash_to_dataframe("barrier/pash.dat")
-    plot_contour(data, "P(1)", "P(2)", "Barrier")
+    print (data)
+    plot_contour(data, "epsilon", "a3", "Barrier")
     plt.show()
     print ("ran")
 

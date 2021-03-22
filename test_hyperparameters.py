@@ -11,7 +11,7 @@ if __name__ == "__main__":
     train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets(data, ["P(1)", "P(2)"], "Barrier")
+        = create_datasets(data, ["epsilon", "a3"], "Barrier")
     normalizer = normalize(train_features)
     layers_parameters = [1,2,2,3,4]
     neurons_parameters = [100, 200]

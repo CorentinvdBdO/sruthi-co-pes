@@ -13,7 +13,7 @@ input_template("type2")
 launch_barrier()
 #change_file_name("pash.dat", "pash_step3new.dat")
 dataset = pash_to_dataframe("barrier/pash.dat")
-features = ["P(1)", "P(2)"]
+features = ["epsilon", "a3"]
 train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
@@ -26,7 +26,7 @@ predicted_labels = model.predict(dataset[features])
 predicted_dataset = retransform(dataset[features], predicted_labels)
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-plot_surface(dataset, "P(1)", "P(2)", "Barrier", ax, alpha=0.5)
+plot_surface(dataset, "epsilon", "a3", "Barrier", ax, alpha=0.5)
 #plot_surface(predicted_dataset,"P(1)", "P(2)", "Barrier", ax,alpha=0.5)
 #plot_surface_diff(dataset,predicted_dataset,"P(1)", "P(2)", "Barrier", ax)
 plt.show()

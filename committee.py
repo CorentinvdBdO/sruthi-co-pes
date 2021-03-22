@@ -51,7 +51,7 @@ def get_histo (Committee, point_features):
 
 
 if __name__ == "__main__":
-    features = ["P(1)", "P(2)"]
+    features = ["epsilon", "a3"]
     dataset = pash_to_dataframe("barrier/large_pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \

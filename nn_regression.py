@@ -101,17 +101,10 @@ if __name__ == "__main__":
     train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets(data, ["P(1)", "P(2)"], "Barrier")
+        = create_datasets(data, ["epsilon", "a3"], "Barrier")
     normalizer = normalize(train_features)
     model = build_model(normalizer, [500])
     model = learning_curve(model, train_features, train_labels, 2000)
-    # Build model
-    # model = tf.keras.Sequential([normalizer,
-    #     tf.keras.layers.Dense(500, input_dim=2, activation='relu'),
-    #     tf.keras.layers.Dense(1)
-    # ])
-    # Compile model
-
     # Fit model
     plt.plot (test_labels, model.predict(test_features), '.')
     plt.show()
