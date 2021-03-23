@@ -7,9 +7,9 @@ import pandas as pd
 from launch_barrier import launch_barrier, input_template
 from extract_pash import pash_to_dataframe
 from nn_regression import create_datasets, normalize, build_model, learning_curve, retransform
-from hyperparameters import calculate_mse, mse_test, hyperparameter_analysis, hyper_analysis
+from hyperparameters import calculate_mse, mse_test, hyper_analysis
 
-dataset = pash_to_dataframe("barrier/large_pash.dat")
+dataset = pash_to_dataframe("barrier/pash_step3.dat")
 features = ["epsilon", "a3"]
 
 # train_dataset, test_dataset, \
@@ -35,10 +35,11 @@ features = ["epsilon", "a3"]
 # plt.yscale("log")
 
 'hyper_analysis tests'
-loss_train_epoch, loss_test_epoch, loss_train_hp, loss_test_hp = hyper_analysis(dataset, features, n_layers=[1,3,5,10])
-epochs_train = np.arange(1, 2001, 1)
-epochs_test = np.arange(1, 2001, 10)
 n_layers = [1,3,5,10]
+loss_train_epoch, loss_test_epoch, loss_train_hp, loss_test_hp = hyper_analysis(
+    dataset, features, n_layers=n_layers, n_epochs=20)
+epochs_train = np.arange(1, 21, 1)
+epochs_test = np.arange(1, 21, 10)
 fig1, ((ax1,ax2),(ax3,ax4)) = plt.subplots(2,2)
 plt.figure()
 plt.plot(n_layers, loss_train_hp, 'g+')
