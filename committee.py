@@ -97,9 +97,6 @@ class HistOnClick:
             pos1 = round((coord[0] - self.min1 )/self.step1 - 1)
             pos2 = round((coord[1] - self.min2 )/self.step2 - 1)
             index = int(pos1*self.len2 + pos2)
-            print(coord, index)
-            print(data.loc[[index], features[0]], data.loc[[index], features[1]])
-
         self.ax2.cla()
         self.ax1.set_data(data.loc[[index], features[0]], data.loc[[index], features[1]])
         point_features = data.loc[[index], features]
