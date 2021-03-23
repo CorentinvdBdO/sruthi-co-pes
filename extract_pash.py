@@ -98,7 +98,7 @@ def plot_heatmap(data, key_1, key_2, key_3, ax = None, colorbar = True, cmap="ho
         if colorbar:
             ax.colorbar()
 
-def plot_contour(data, key_1, key_2, key_3, levels=6, ax=plt.gca(), cmap="hot", colorbar=True):
+def plot_contour(data, key_1, key_2, key_3, levels=6, ax=plt.gca(), cmap="hot", colorbar=True, bar_name=None):
     """
     Plot a contour graph of the input data
     :param data: a DataFrame
@@ -117,7 +117,9 @@ def plot_contour(data, key_1, key_2, key_3, levels=6, ax=plt.gca(), cmap="hot", 
     ax.set_xlabel(key_1)
     ax.set_ylabel(key_2)
     if colorbar:
-        plt.colorbar(img, label=key_3, ax=ax)
+        if bar_name is None:
+            bar_name = key_3
+        plt.colorbar(img, label=bar_name, ax=ax)
 
 def plot_points(data, features, ax=plt.gca()):
 

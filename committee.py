@@ -48,7 +48,7 @@ def get_mean_var(list_prediction):
 
 def plot_histo (Committee, point_features, expected_value, ax=plt.gca()):
     predicted_list = np.ravel(Committee.predict(point_features))
-    n, b, p= plt.hist(predicted_list)
+    n, b, p= ax.hist(predicted_list)
     ax.vlines(expected_value, 0, max(n), colors="r")
     return 0
 
@@ -94,41 +94,52 @@ class HistOnClick:
                     norm = newnorm
                     index = i
         else:
-            pos1 = (coord[0] - self.min1 )//self.step1 - 1
-            pos2 = (coord[1] - self.min2 )//self.step2 - 1
+            pos1 = round((coord[0] - self.min1 )/self.step1 - 1)
+            pos2 = round((coord[1] - self.min2 )/self.step2 - 1)
             index = int(pos1*self.len2 + pos2)
+            print(coord, index)
+            print(data.loc[[index], features[0]], data.loc[[index], features[1]])
 
+        self.ax2.cla()
         self.ax1.set_data(data.loc[[index], features[0]], data.loc[[index], features[1]])
         point_features = data.loc[[index], features]
         expected_value = data.loc[[index], target]
-        self.ax2.cla()
         plot_histo(Committee, point_features, expected_value, self.ax2)
         self.ax2.figure.canvas.draw()
 
+def multiple_plots(Committee, features, target, data):
+    list_prediction = Committee.predict(data[features])
+    predicted_target, variance = get_mean_var(list_prediction)
+    predicted_target = retransform(data[features], predicted_target)
+    variance = retransform(data[features], variance)
 
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
+
+    plot_contour(variance, features[0], features[1], target, colorbar=True, ax=ax1, bar_name="Variance")
+    plot_contour(predicted_target, features[0], features[1], target, colorbar=True, levels=40, ax=ax3,
+                 bar_name="Predicted Barrier")
+    plot_contour(data, features[0], features[1], target, colorbar=True, ax=ax4, levels=40,
+                 bar_name="Expected Barrier")
+    plot_points(train_dataset, features, ax1)
+    pointer, = ax1.plot([0], [0], "+")
+    object = HistOnClick(pointer, ax2, Committee, data, features, target)
+
+    plt.show()
+    return object
 
 if __name__ == "__main__":
     features = ["epsilon", "a3"]
-    data = pash_to_dataframe("barrier/large_pash.dat")
+    data = pash_to_dataframe("barrier/pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(data, features, "Barrier", frac=0.1)
+        = create_datasets(data, features, "Barrier", frac=0.5)
 
     Committee = Committee(4)
 
     normalizer = normalize(train_features)
     Committee.build_model(normalizer, [100, 100, 100])
-    Committee.fit(train_features, train_labels, epochs=1000, verbose=0, split_train=True)
-    #plot_histo(Committee, test_dataset.loc[[11],features], test_dataset.loc[[11],"Barrier"])
-    #plt.show()
-    list_prediction = Committee.predict(data[features])
-    predicted_target, variance = get_mean_var(list_prediction)
-    predicted_data = retransform(data[features], predicted_target)
+    Committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=False)
 
-    fig, (ax1,ax2)= plt.subplots(1,2)
-    pointer, = ax1.plot([0], [0], "+")
-    object = HistOnClick(pointer, ax2, Committee, data, features, "Barrier")
-    plot_contour(predicted_data, features[0], features[1], "Barrier", colorbar=True, ax=ax1)
-    plot_points(train_dataset, features, ax1)
-    plt.show()
+    o = multiple_plots(Committee, features, "Barrier", data)
+
