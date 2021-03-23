@@ -76,8 +76,23 @@ def learning_curve(history):
     :param losses: History.history, output of a fit.
     """
     losses = history['loss']
-    epochs = np.arange(0,len(losses),1)
-    plt.plot(epochs, losses)
+    plt.plot(losses)
+
+def convergence_time(history, threshold = 4, req_time_confined = 10):
+    """
+    returns the start epoch from which the loss has been within threshold
+    of the last observed loss for ta least 10 epochs.
+    else, return the last epoch
+    Considers that the epochs range from (0, len(losses))
+    """
+    losses = history['loss']
+    for i in range(len(losses)):
+        rest = losses[i:]
+        rest = np.mean(rest)
+        if losses[i] < rest:
+            plt.vlines(i, 0, 10, colors="r")
+            return i
+
 
 def retransform(data, predicted_target, target_keys=["Barrier"]):
     """
@@ -112,9 +127,11 @@ if __name__ == "__main__":
         = create_datasets(data, ["epsilon", "a3"], "Barrier", frac=0.5)
     print(train_dataset, data, test_dataset)
     normalizer = normalize(train_features)
-    model = build_model(normalizer, [500])
-    history = model.fit(train_features, train_labels, epochs=1000).history
+    model = build_model(normalizer, [100, 100, 100])
+    history = model.fit(train_features, train_labels, epochs=5000).history
+    print(convergence_time(history))
     learning_curve(history)
+    #plt.yscale("log")
     plt.show()
-    plt.plot (test_labels, model.predict(test_features), '.')
+    plt.plot(test_labels, model.predict(test_features), '.')
     plt.show()
