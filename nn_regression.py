@@ -131,7 +131,10 @@ if __name__ == "__main__":
     history = model.fit(train_features, train_labels, epochs=5000).history
     print(convergence_time(history))
     learning_curve(history)
-    #plt.yscale("log")
+    plt.yscale("log")
+
+    plt.ylabel("MSE")
+    plt.xlabel("epoch")
     plt.show()
     plt.plot(test_labels, model.predict(test_features), '.')
     plt.show()
