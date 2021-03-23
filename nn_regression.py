@@ -78,14 +78,13 @@ def learning_curve(history):
     losses = history['loss']
     plt.plot(losses)
 
-def convergence_time(history, threshold = 4, req_time_confined = 10):
+def convergence_time(losses):
     """
     returns the start epoch from which the loss has been within threshold
     of the last observed loss for ta least 10 epochs.
     else, return the last epoch
     Considers that the epochs range from (0, len(losses))
     """
-    losses = history['loss']
     for i in range(len(losses)):
         rest = losses[i:]
         rest = np.mean(rest)
