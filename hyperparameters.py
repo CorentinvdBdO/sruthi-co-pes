@@ -89,6 +89,7 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
     losses_train_hp = [0] * (len(parameter_combinations_mesh))
     losses_test_hp = [0] * (len(parameter_combinations_mesh))
     for i in range(len(parameter_combinations_mesh)):
+        print("model "+str(i+1)+"/"+str(len(parameter_combinations_mesh)))
         models[i] = build_model(normalizer, parameter_combinations_mesh[i][0],
                                 activation=parameter_combinations_mesh[i][3],
                                 optimizer=parameter_combinations_mesh[i][4],
