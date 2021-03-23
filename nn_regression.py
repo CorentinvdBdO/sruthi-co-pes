@@ -91,6 +91,7 @@ def convergence_time(losses):
         if losses[i] < rest:
             plt.vlines(i, 0, 10, colors="r")
             return i
+        return len(losses)-1
 
 
 def retransform(data, predicted_target, target_keys=["Barrier"]):
@@ -128,7 +129,7 @@ if __name__ == "__main__":
     normalizer = normalize(train_features)
     model = build_model(normalizer, [100, 100, 100])
     history = model.fit(train_features, train_labels, epochs=5000).history
-    print(convergence_time(history))
+    print(convergence_time(history['loss']))
     learning_curve(history)
     plt.yscale("log")
 
