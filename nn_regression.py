@@ -89,7 +89,6 @@ def convergence_time(losses):
         rest = losses[i:]
         rest = np.mean(rest)
         if losses[i] < rest:
-            plt.vlines(i, 0, 10, colors="r")
             return i
         return len(losses)-1
 
@@ -129,7 +128,8 @@ if __name__ == "__main__":
     normalizer = normalize(train_features)
     model = build_model(normalizer, [100, 100, 100])
     history = model.fit(train_features, train_labels, epochs=5000).history
-    print(convergence_time(history['loss']))
+    time =convergence_time(history['loss'])
+    plt.vlines(time, 0, 10, colors="r")
     learning_curve(history)
     plt.yscale("log")
 

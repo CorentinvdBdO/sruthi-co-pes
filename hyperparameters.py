@@ -64,17 +64,16 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
         if not (type(input_parameters[i]) == list):
             input_parameters[i] = [input_parameters[i]]
 
-    'layer structure'
-    layer_mesh = np.array(np.meshgrid(input_parameters[0], input_parameters[1])).T.reshape(-1, 2)
-    layers = [0] * len(layer_mesh)
-    for i in range(len(layer_mesh)):
-        layers[i] = np.ones(layer_mesh[i][0]) * layer_mesh[i][1]
-
     'make an array of all combinations of parameters'
-    parameter_mesh = np.array(np.meshgrid(layers, input_parameters[2], input_parameters[3], input_parameters[4],
+    parameter_mesh = np.array(np.meshgrid(input_parameters[0], input_parameters[1], input_parameters[2], input_parameters[3], input_parameters[4],
                                           input_parameters[5], input_parameters[6]))
-    parameter_combinations_mesh = parameter_mesh.T.reshape(-1, 6)
-
+    parameter_combinations_mesh = parameter_mesh.T.reshape(-1, 7)
+    parameter_combinations_mesh = parameter_combinations_mesh.tolist()
+    for para in parameter_combinations_mesh:
+        para[0] = int(para[0])
+        para[1] = int(para[1])
+        para[2] = int(para[2])
+        para[3] = int(para[3])
     'make input data ready to be used'
     train_dataset, test_dataset, \
     train_features, train_labels, \
@@ -89,16 +88,17 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
     losses_train_hp = [0] * (len(parameter_combinations_mesh))
     losses_test_hp = [0] * (len(parameter_combinations_mesh))
     for i in range(len(parameter_combinations_mesh)):
+        layer = np.ones(parameter_combinations_mesh[i][0]) * parameter_combinations_mesh[i][1]
         print("model "+str(i+1)+"/"+str(len(parameter_combinations_mesh)))
-        models[i] = build_model(normalizer, parameter_combinations_mesh[i][0],
-                                activation=parameter_combinations_mesh[i][3],
-                                optimizer=parameter_combinations_mesh[i][4],
-                                loss=parameter_combinations_mesh[i][5])
+        models[i] = build_model(normalizer, layer,
+                                activation=parameter_combinations_mesh[i][4],
+                                optimizer=parameter_combinations_mesh[i][5],
+                                loss=parameter_combinations_mesh[i][6])
         loss_train_epoch, loss_test_epoch = mse_test(models[i], train_features, train_labels,
                                                      test_features, test_labels,
-                                                     parameter_combinations_mesh[i][2],
-                                                     parameter_combinations_mesh[i][1])
-
+                                                     parameter_combinations_mesh[i][3],
+                                                     parameter_combinations_mesh[i][2])
+        print("done")
         losses_train_epoch[i] = loss_train_epoch
         losses_test_epoch[i] = loss_test_epoch
         losses_train_hp[i] = loss_train_epoch[convergence_time(loss_train_epoch)]
