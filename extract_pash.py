@@ -128,9 +128,9 @@ def plot_points(data, features, ax=plt.gca()):
 if __name__ == "__main__":
     #input_template("step3")
     #launch_barrier()
-    data = pash_to_dataframe("barrier/pash.dat")
+    data = pash_to_dataframe("barrier/large_pash.dat")
     print (data)
-    plot_contour(data, "epsilon", "a3", "Barrier", levels=10)
+    plot_contour(data, "epsilon", "a3", "Barrier", levels=100, cmap="viridis")
     plt.show()
     print("ran")
 

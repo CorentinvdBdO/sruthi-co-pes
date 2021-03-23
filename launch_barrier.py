@@ -47,8 +47,9 @@ def change_file_name (name, new_name, in_barrier = True, keep_original = True):
     return 0
 
 if __name__ == "__main__":
-    input_template("step3")
-    launch_barrier()
+    #input_template("large")
+    #launch_barrier()
+    change_file_name("pash.dat", "large_pash.dat")
     print ("ran")
 
 

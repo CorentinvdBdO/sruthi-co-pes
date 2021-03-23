@@ -50,6 +50,7 @@ def plot_histo (Committee, point_features, expected_value, ax=plt.gca()):
     predicted_list = np.ravel(Committee.predict(point_features))
     n, b, p= ax.hist(predicted_list)
     ax.vlines(expected_value, 0, max(n), colors="r")
+    ax.vlines(np.mean(predicted_list), 0, max(n), colors="g")
     return 0
 
 
@@ -115,9 +116,16 @@ def multiple_plots(Committee, features, target, data):
     plot_contour(variance, features[0], features[1], target, colorbar=True, ax=ax1, bar_name="Variance")
     plot_contour(predicted_target, features[0], features[1], target, colorbar=True, levels=40, ax=ax3,
                  bar_name="Predicted Barrier")
-    plot_contour(data, features[0], features[1], target, colorbar=True, ax=ax4, levels=40,
-                 bar_name="Expected Barrier")
+
+    diff = np.abs(data[target] - predicted_target[target])
+    data_diff = retransform(data[features], diff)
+    plot_contour(data_diff, features[0], features[1], target, colorbar=True, ax=ax4, levels=40,
+                 bar_name="Barrier difference with expected")
+
     plot_points(train_dataset, features, ax1)
+    plot_points(train_dataset, features, ax3)
+    plot_points(train_dataset, features, ax4)
+
     pointer, = ax1.plot([0], [0], "+")
     object = HistOnClick(pointer, ax2, Committee, data, features, target)
 
@@ -126,13 +134,13 @@ def multiple_plots(Committee, features, target, data):
 
 if __name__ == "__main__":
     features = ["epsilon", "a3"]
-    data = pash_to_dataframe("barrier/pash.dat")
+    data = pash_to_dataframe("barrier/large_pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(data, features, "Barrier", frac=0.5)
+        = create_datasets(data, features, "Barrier", frac=0.05)
 
-    Committee = Committee(4)
+    Committee = Committee(50)
 
     normalizer = normalize(train_features)
     Committee.build_model(normalizer, [100, 100, 100])
