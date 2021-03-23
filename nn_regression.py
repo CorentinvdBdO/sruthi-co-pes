@@ -46,7 +46,7 @@ def normalize(data):
     normalizer.adapt(np.array(data))
     return normalizer
 
-def build_model(normalizer, layers, input_dim = 2, activation='relu', optimizer='adam'):
+def build_model(normalizer, layers, input_dim = 2, activation='relu', optimizer='adam',loss='mean_squared_error'):
     """
     Takes a normalizer adapted to input and the form of neural network
             and return a compiled keras model
@@ -67,7 +67,7 @@ def build_model(normalizer, layers, input_dim = 2, activation='relu', optimizer=
         else:
             model.add(tf.keras.layers.Dense(neurons_no, activation=activation))
     model.add(tf.keras.layers.Dense(1))
-    model.compile(loss='mean_squared_error', optimizer=optimizer)
+    model.compile(loss=loss, optimizer=optimizer)
     return model
 
 def learning_curve(history):
