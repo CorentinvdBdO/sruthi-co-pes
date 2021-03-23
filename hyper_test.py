@@ -35,23 +35,22 @@ features = ["epsilon", "a3"]
 # plt.yscale("log")
 
 'hyper_analysis tests'
-n_layers = [1,3,5,10]
 loss_train_epoch, loss_test_epoch, loss_train_hp, loss_test_hp = hyper_analysis(
-    dataset, features, n_layers=n_layers, n_epochs=20)
-epochs_train = np.arange(1, 21, 1)
-epochs_test = np.arange(1, 21, 10)
-fig1, ((ax1,ax2),(ax3,ax4)) = plt.subplots(2,2)
-plt.figure()
-plt.plot(n_layers, loss_train_hp, 'g+')
-plt.plot(n_layers, loss_test_hp, 'b+')
-ax1.plot(epochs_train, loss_train_epoch[0], 'b+')
-ax1.plot(epochs_test, loss_test_epoch[0], 'r+')
-ax2.plot(epochs_train, loss_train_epoch[1], 'b+')
-ax2.plot(epochs_test, loss_test_epoch[1], 'r+')
-ax3.plot(epochs_train, loss_train_epoch[2], 'b+')
-ax3.plot(epochs_test, loss_test_epoch[2], 'r+')
-ax4.plot(epochs_train, loss_train_epoch[3], 'b+')
-ax4.plot(epochs_test, loss_test_epoch[3], 'r+')
+    dataset, features,
+    n_neurons_per_layer=[5, 10, 20, 40, 70, 100, 150, 200, 300, 400, 500],
+    n_layers=3,
+    n_epochs=1500,
+    frac=0.1)
+n_neurons_per_layer=[5, 10, 20, 40, 70, 100, 150, 200, 300, 400, 500]
+
+plt.plot(n_neurons_per_layer, loss_train_hp, 'g+')
+plt.plot(n_neurons_per_layer, loss_test_hp, 'b+')
+
+plt.title("Loss as a function of the number of neurons")
+plt.ylabel("Loss at the end of training")
+plt.xlabel("Number of neurons")
+
+plt.show()
 
 
 
