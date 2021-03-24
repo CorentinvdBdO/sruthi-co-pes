@@ -46,16 +46,18 @@ def mse_test(model, train_features, train_labels, test_features, test_labels, ep
 def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batchsize=10, n_epochs=2000,
                    activation='relu', optimizer='adam', loss='mean_squared_error', frac = 0.5):
     '''
-
-    :param dataset:
-    :param features:
-    :param n_layers:
-    :param n_neurons_per_layer:
-    :param batchsize:
-    :param n_epochs:
-    :param activation:
-    :param optimizer:
-    :return:
+    Takes dataset, features and a list of values for hyperparameters (takes a default value when no input given) and
+    returns the loss on training set and the loss on test set per epoch
+    and also the final loss reached as a function of the varied hyperparameters
+    :param dataset: dataset
+    :param features: dataset
+    :param n_layers: default int or int list
+    :param n_neurons_per_layer: default int or int list
+    :param batchsize: default int or int list
+    :param n_epochs: default int or int list
+    :param activation: default activation function or string list
+    :param optimizer: default optimizer or string list
+    :return: 4 lists
     '''
 
     'transform input parameters into arrays'
@@ -74,6 +76,7 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
         para[1] = int(para[1])
         para[2] = int(para[2])
         para[3] = int(para[3])
+    print(parameter_combinations_mesh)
     'make input data ready to be used'
     train_dataset, test_dataset, \
     train_features, train_labels, \
@@ -105,3 +108,5 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
         losses_test_hp[i] = loss_test_epoch[convergence_time(loss_test_epoch)]
 
     return losses_train_epoch, losses_test_epoch, losses_train_hp, losses_test_hp
+
+
