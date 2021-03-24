@@ -48,9 +48,9 @@ if __name__ == "__main__":
     committee = Committee(n_models)
     normalizer = normalize(train_features)
     Committee.build_model(normalizer, model_shape)
-    # |||||||||||||||||       While the mean variance is not good enough:
-    mean_variance = 2*goal_variance
-    while mean_variance > goal_variance:
+    # |||||||||||||||||       While the min variance is not good enough:
+    min_variance = 2*goal_variance
+    while min_variance > goal_variance:
         # |||||||||||||||||   Fit the Committee
         Committee.fit(train_features, train_target, epochs=epochs, verbose=0, bootstrap=bootstrap, split_train=split_train)
         # |||||||||||||||||   Get Highest variance point
