@@ -5,7 +5,6 @@ import subprocess
 import os
 import shutil
 
-
 def input_template(template_name):
     """
     Change barrier.inp to a template from barrier/template
@@ -45,6 +44,9 @@ def change_file_name (name, new_name, in_barrier = True, keep_original = True):
     if in_barrier:
         os.chdir("..")
     return 0
+
+
+
 
 if __name__ == "__main__":
     #input_template("large")
