@@ -36,6 +36,7 @@ if __name__ == "__main__":
     model_shape = [150, 150, 150]
     epochs = 1500
     split_train = True
+    bootstrap = 0.8
     # |||||||||||||||||      Create initial training data
     input_template('step3')
     change_input([min_epsilon, max_epsilon, initial_size[0]], [min_a3, max_a3, initial_size[1]])
@@ -51,7 +52,7 @@ if __name__ == "__main__":
     mean_variance = 2*goal_variance
     while mean_variance > goal_variance:
         # |||||||||||||||||   Fit the Committee
-        Committee.fit(train_features, train_target, epochs=epochs, verbose=0, split_train=split_train)
+        Committee.fit(train_features, train_target, epochs=epochs, verbose=0, bootstrap=bootstrap, split_train=split_train)
         # |||||||||||||||||   Get Highest variance point
         list_prediction = Committee.predict(train_features)
         predicted_target, variance = get_mean_var(list_prediction)
