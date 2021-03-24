@@ -1,10 +1,6 @@
-from launch_barrier import launch_barrier, input_template, change_file_name
-from extract_pash import pash_to_type_1_barrier, pash_type_1_to_dataframe
+from launch_barrier_type1 import launch_barrier_type_1
 
-input_template("type1")
-launch_barrier()
-change_file_name("pash.dat", "pash_type1_test.dat")
-barrier = pash_to_type_1_barrier("barrier/pash_type1_test.dat")
-data_point = pash_type_1_to_dataframe(0.5, 0.1, barrier, 0, ["epsilon", "alpha_3"], "Barrier")
+
+data_point = launch_barrier_type_1(0.5, 0.1, 0)
 print(data_point)
-print(barrier)
+
