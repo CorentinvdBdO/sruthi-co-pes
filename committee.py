@@ -2,7 +2,7 @@ from nn_regression import create_datasets, normalize, build_model, learning_curv
 import numpy as np
 from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_contour, plot_points
 import matplotlib.pyplot as plt
-
+from hyperparameters import calculate_mse
 
 class Committee:
     def __init__(self, models_number):
@@ -76,9 +76,9 @@ class HistOnClick:
                 diff = data.loc[index+1, features[1]]-data.loc[index, features[1]]
                 index += 1
             lent = len(data)
-            self.min1 = data.loc[0,features[0]]
+            self.min1 = data.loc[0, features[0]]
             max1 = data.loc[lent-1, features[0]]
-            self.min2 = data.loc[0,features[1]]
+            self.min2 = data.loc[0, features[1]]
             len2 = index
             len1 = lent // index
             self.len2 = len2
@@ -143,13 +143,18 @@ if __name__ == "__main__":
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(data, features, "Barrier", frac=0.05)
+        = create_datasets(data, features, "Barrier", frac=383)
 
-    committee = Committee(50)
+    committee = Committee(10)
 
     normalizer = normalize(train_features)
-    committee.build_model(normalizer, [100, 100, 100])
-    committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=False)
+    committee.build_model(normalizer, [150, 150, 150], optimizer="adamax")
+    committee.fit(train_features, train_labels, epochs=6000, verbose=0, bootstrap=.5)
 
+    list_prediction = committee.predict(data[features])
+    predicted_target, variance = get_mean_var(list_prediction)
+    predicted_target = np.ravel(predicted_target)
+    mse = calculate_mse(predicted_target, data["Barrier"])
+    print("mse ", mse)
     o = multiple_plots(committee, features, "Barrier", data, train_dataset)
 
