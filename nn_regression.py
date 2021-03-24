@@ -1,3 +1,5 @@
+import os
+import shutil
 import tensorflow as tf
 import numpy as np
 from extract_pash import pash_to_dataframe, plot_surface
@@ -38,6 +40,28 @@ def create_datasets(data, features, target, frac=0.5):
     train_target = train_features.pop(target)
     test_target = test_features.pop(target)
     return train_data, test_data, train_features, train_target, test_features,test_target
+
+def create_empty_dataset(path_src, path_dst):
+    '''
+    Takes a path to a file to copy and make empty
+    :param path_src: file to be copied
+    :param path_dst: copied, empty file
+    :return:
+    '''
+    shutil.copy(path_src, path_dst)
+    dataset = pash_to_dataframe(path_dst, new_P1="epsilon", new_P2="a3", start_indice=0)
+    f = open(path_dst, "r")
+    lines = f.readlines()
+    f.close()
+    number_lines = len(lines)
+    for i in range(10,number_lines):
+        epsilon = dataset.loc[i-10,"epsilon"]
+        a3 = dataset.loc[i-10,"a3"]
+        lines[i] = ' {:.4f} {:.4f}  {:.4f}  {:.4f} {:.4f}   {:.4f}   {:.4f}  {:.4f}  {:.4f} {:.4f}  {:.4f}\n'.format(epsilon,a3,0,0,0,0,0,0,0,0,0)
+    f = open(path_dst, "w")
+    f.write("".join(lines))
+    f.close()
+    return 0
 
 def normalize(data):
     """
