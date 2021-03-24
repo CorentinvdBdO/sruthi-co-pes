@@ -40,9 +40,9 @@ if __name__ == "__main__":
     input_template('step3')
     change_input([min_epsilon, max_epsilon, initial_size[0]], [min_a3, max_a3, initial_size[1]])
     launch_barrier()
-    data = pash_to_dataframe("barrier/pash.dat", features[0], features[1])
-    train_features = data[features]
-    train_target = data[target]
+    data_train = pash_to_dataframe("barrier/pash.dat", features[0], features[1])
+    train_features = data_train[features]
+    train_target = data_train[target]
     # |||||||||||||||||      Create the Committee
     committee = Committee(n_models)
     normalizer = normalize(train_features)
@@ -53,9 +53,9 @@ if __name__ == "__main__":
         # |||||||||||||||||   Fit the Committee
         Committee.fit(train_features, train_target, epochs=epochs, verbose=0, split_train=split_train)
         # |||||||||||||||||   Get Highest variance point
-        list_prediction = Committee.predict(train_features[features])
+        list_prediction = Committee.predict(train_features)
         predicted_target, variance = get_mean_var(list_prediction)
-        variance = retransform(data[features], variance)
+        variance = retransform(train_features, variance)
         # |||||||||||||||||   Create more data
         launch_barrier()
         # |||||||||||||||||   Append correct indices
