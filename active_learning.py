@@ -4,6 +4,7 @@ from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_con
 import matplotlib.pyplot as plt
 from launch_barrier import launch_barrier, change_file_name, input_template
 from committee import Committee, get_mean_var, multiple_plots
+from hyperparameters import calculate_mse
 def change_input(epsilon, alpha3):
     """
     :param epsilon: list : [min, max, n]
@@ -24,7 +25,7 @@ def change_input(epsilon, alpha3):
 
 if __name__ == "__main__":
     # |||||||||||||||||   Inputs:
-    goal_variance = 3
+    goal_variance = 1
     min_epsilon = 0
     max_epsilon = .95
     min_a3 = 0
@@ -32,14 +33,15 @@ if __name__ == "__main__":
     initial_size = [10,10]
     features = ["epsilon", "a3"]
     target = "Barrier"
-    frac = 100
+    frac = 120
     n_models = 5
-    model_shape = [150, 150, 150]
-    epochs = 500
+    model_shape = [150, 150, 150, 150, 150, 150]
+    epochs = 200
+    batch_size = 30
     split_train = True
     bootstrap = 0.8
     top_variance_percentage = 0.2
-    high_variance_kept = 0.02
+    high_variance_kept = 20
     # |||||||||||||||||      Create initial training data
     # Here, we cheat and use the precomputed 4000 large dataset
     #input_template('step3')
@@ -54,32 +56,60 @@ if __name__ == "__main__":
     # |||||||||||||||||      Create the Committee
     committee = Committee(n_models)
     normalizer = normalize(train_features)
-    committee.build_model(normalizer, model_shape)
-    print("Created models")
+    committee.build_model(normalizer, model_shape, optimizer='adamax')
+    print('Created models')
     # |||||||||||||||||       While the min variance is not good enough:
     max_variance = 2*goal_variance
+    variance_stat=[[],[],[]]
+    mse_list = []
+    epoch_list = [0]
     while max_variance > goal_variance:
         # |||||||||||||||||   Fit the Committee
         print("fitting Committee")
-        committee.fit(train_features, train_target, epochs=epochs,
+        committee.fit(train_features, train_target, epochs=epochs, batch_size=batch_size,
                       verbose=0, bootstrap=bootstrap, split_train=split_train)
         print("fitted Committee")
         # |||||||||||||||||   Get Highest variance point
         list_prediction = committee.predict(data[features])
         predicted_target, variance = get_mean_var(list_prediction)
         max_variance = np.max(variance)
+        predicted_target = np.ravel(predicted_target)
+        mse = calculate_mse(predicted_target, data[target])
+        mse_list += [mse]
+        epoch_list += [epoch_list[-1] + epochs]
+        #plt.hist(np.ravel(variance),bins=20)
+        #plt.yscale('log')
+        #plt.show()
+        variance_stat[0] += [np.max(variance)]
+        variance_stat[1] += [np.median(variance)]
+        variance_stat[2] += [np.mean(variance)]
         print("maximum variance is ", max_variance)
+        print("mse is ", mse)
         # Take the top 20% high variance
         variance_dataframe = retransform(data[features+[target]], variance, target_keys=['variance'])
         variance_dataframe = variance_dataframe.sort_values(by='variance',ascending = False)
         variance_dataframe = variance_dataframe.head(int(top_variance_percentage*len(data)))
+        variance_dataframe = variance_dataframe[variance_dataframe["variance"]>goal_variance]
+        print(variance_dataframe)
         # |||||||||||||||||   Create more data
-        new_training = variance_dataframe.sample(frac=high_variance_kept)[features+[target]]
+        print("training set of size ", len(train_dataset))
+        new_training = variance_dataframe.sample(n=min(high_variance_kept, len(variance_dataframe)))[features+[target]]
         # |||||||||||||||||   Append correct indices
         train_dataset = train_dataset.append(new_training)
         train_dataset = train_dataset.drop_duplicates()
         train_features = train_dataset[features]
         train_target = train_dataset[target]
     # |||||||||||||||||       Compare predicted to a real dataset
+    epoch_list = epoch_list[1:]
+    plt.plot(epoch_list, mse_list, '+')
+    plt.xlabel("epoch")
+    plt.ylabel("MSE")
+    plt.show()
+    plt.plot(epoch_list, variance_stat[0],'+')
+    plt.plot(epoch_list, variance_stat[1],'+')
+    plt.plot(epoch_list, variance_stat[2],'+')
+    plt.xlabel("epoch")
+    plt.ylabel("variance")
+    plt.show()
     o = multiple_plots(committee, features, target, data, train_dataset)
     print("yeah")

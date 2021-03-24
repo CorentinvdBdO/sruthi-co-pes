@@ -8,10 +8,10 @@ class Committee:
     def __init__(self, models_number):
         self.models_number = models_number
         self.models = []
-    def build_model(self, normalizer, layers):
+    def build_model(self, normalizer, layers, optimizer="adam"):
         for i in range (self.models_number):
-            self.models += [build_model(normalizer, layers)]
-    def fit(self, train_features, train_labels, epochs, verbose = 1, split_train = False, bootstrap = None):
+            self.models += [build_model(normalizer, layers, optimizer=optimizer)]
+    def fit(self, train_features, train_labels, epochs,batch_size=30, verbose = 1, split_train = False, bootstrap = None):
         history_list = []
         if split_train:
             n = len(train_features)//self.models_number
@@ -31,7 +31,7 @@ class Committee:
             else:
                 train_features_spec = train_features
                 train_labels_spec = train_labels
-            history_list += [model.fit(train_features_spec, train_labels_spec, epochs=epochs, verbose=verbose)]
+            history_list += [model.fit(train_features_spec, train_labels_spec, batch_size=batch_size, epochs=epochs, verbose=verbose)]
             i += 1
         return history_list
     def retransform (self, features, data):
@@ -50,8 +50,8 @@ def get_mean_var(list_prediction):
     var_list = np.var(list_prediction, 0)
     return mean_list, var_list
 
-def plot_histo (Committee, point_features, expected_value, ax=plt.gca()):
-    predicted_list = np.ravel(Committee.predict(point_features))
+def plot_histo (committee, point_features, expected_value, ax=plt.gca()):
+    predicted_list = np.ravel(committee.predict(point_features))
     n, b, p= ax.hist(predicted_list)
     ax.vlines(expected_value, 0, max(n), colors="r")
     ax.vlines(np.mean(predicted_list), 0, max(n), colors="g")
@@ -59,8 +59,8 @@ def plot_histo (Committee, point_features, expected_value, ax=plt.gca()):
 
 
 class HistOnClick:
-    def __init__(self, ax1, ax2, Committee, data, features, target, in_order = True):
-        self.Committee = Committee
+    def __init__(self, ax1, ax2, committee, data, features, target, in_order = True):
+        self.committee = committee
         self.ax1 = ax1
         self.ax2 = ax2
         self.ax1.figure.canvas.mpl_connect('button_press_event', self.on_click)
@@ -88,6 +88,7 @@ class HistOnClick:
     def on_click (self, event):
         features = self.features
         target = self.target
+        data = self.data
         coord = np.array([event.xdata, event.ydata])
         if self.in_order is False:
             index = 0
@@ -106,11 +107,11 @@ class HistOnClick:
         self.ax1.set_data(data.loc[[index], features[0]], data.loc[[index], features[1]])
         point_features = data.loc[[index], features]
         expected_value = data.loc[[index], target]
-        plot_histo(Committee, point_features, expected_value, self.ax2)
+        plot_histo(self.committee, point_features, expected_value, self.ax2)
         self.ax2.figure.canvas.draw()
 
-def multiple_plots(Committee, features, target, data, train_dataset):
-    list_prediction = Committee.predict(data[features])
+def multiple_plots(committee, features, target, data, train_dataset):
+    list_prediction = committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
     predicted_target = retransform(data[features], predicted_target)
     variance = retransform(data[features], variance)
@@ -131,7 +132,7 @@ def multiple_plots(Committee, features, target, data, train_dataset):
     plot_points(train_dataset, features, ax4)
 
     pointer, = ax1.plot([0], [0], "+")
-    object = HistOnClick(pointer, ax2, Committee, data, features, target)
+    object = HistOnClick(pointer, ax2, committee, data, features, target)
 
     plt.show()
     return object
@@ -144,11 +145,11 @@ if __name__ == "__main__":
     test_features, test_labels \
         = create_datasets(data, features, "Barrier", frac=0.05)
 
-    Committee = Committee(50)
+    committee = Committee(50)
 
     normalizer = normalize(train_features)
-    Committee.build_model(normalizer, [100, 100, 100])
-    Committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=False)
+    committee.build_model(normalizer, [100, 100, 100])
+    committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=False)
 
-    o = multiple_plots(Committee, features, "Barrier", data, train_dataset)
+    o = multiple_plots(committee, features, "Barrier", data, train_dataset)
 
