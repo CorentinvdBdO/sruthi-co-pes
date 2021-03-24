@@ -3,7 +3,7 @@ import numpy as np
 from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_contour, plot_points
 import matplotlib.pyplot as plt
 from launch_barrier import launch_barrier, change_file_name, input_template
-from committee import Committee
+from committee import Committee, get_mean_var, multiple_plots
 def change_input(epsilon, alpha3):
     """
     :param epsilon: list : [min, max, n]
@@ -24,7 +24,7 @@ def change_input(epsilon, alpha3):
 
 if __name__ == "__main__":
     # |||||||||||||||||   Inputs:
-    goal_variance = 100
+    goal_variance = 3
     min_epsilon = 0
     max_epsilon = .95
     min_a3 = 0
@@ -32,33 +32,54 @@ if __name__ == "__main__":
     initial_size = [10,10]
     features = ["epsilon", "a3"]
     target = "Barrier"
+    frac = 100
     n_models = 5
     model_shape = [150, 150, 150]
-    epochs = 1500
+    epochs = 500
     split_train = True
+    bootstrap = 0.8
+    top_variance_percentage = 0.2
+    high_variance_kept = 0.02
     # |||||||||||||||||      Create initial training data
-    input_template('step3')
-    change_input([min_epsilon, max_epsilon, initial_size[0]], [min_a3, max_a3, initial_size[1]])
-    launch_barrier()
-    data_train = pash_to_dataframe("barrier/pash.dat", features[0], features[1])
-    train_features = data_train[features]
-    train_target = data_train[target]
+    # Here, we cheat and use the precomputed 4000 large dataset
+    #input_template('step3')
+    #change_input([min_epsilon, max_epsilon, initial_size[0]], [min_a3, max_a3, initial_size[1]])
+    #launch_barrier()
+    data = pash_to_dataframe("barrier/large_pash.dat", features[0], features[1])
+    train_dataset, test_dataset, \
+    train_features, train_target, \
+    test_features, test_target \
+        = create_datasets(data, features, "Barrier", frac=frac)
+    print("imported data")
     # |||||||||||||||||      Create the Committee
     committee = Committee(n_models)
     normalizer = normalize(train_features)
-    Committee.build_model(normalizer, model_shape)
-    # |||||||||||||||||       While the mean variance is not good enough:
-    mean_variance = 2*goal_variance
-    while mean_variance > goal_variance:
+    committee.build_model(normalizer, model_shape)
+    print("Created models")
+    # |||||||||||||||||       While the min variance is not good enough:
+    max_variance = 2*goal_variance
+    while max_variance > goal_variance:
         # |||||||||||||||||   Fit the Committee
-        Committee.fit(train_features, train_target, epochs=epochs, verbose=0, split_train=split_train)
+        print("fitting Committee")
+        committee.fit(train_features, train_target, epochs=epochs,
+                      verbose=0, bootstrap=bootstrap, split_train=split_train)
+        print("fitted Committee")
         # |||||||||||||||||   Get Highest variance point
-        list_prediction = Committee.predict(train_features)
+        list_prediction = committee.predict(data[features])
         predicted_target, variance = get_mean_var(list_prediction)
-        variance = retransform(train_features, variance)
+        max_variance = np.max(variance)
+        print("maximum variance is ", max_variance)
+        # Take the top 20% high variance
+        variance_dataframe = retransform(data[features+[target]], variance, target_keys=['variance'])
+        variance_dataframe = variance_dataframe.sort_values(by='variance',ascending = False)
+        variance_dataframe = variance_dataframe.head(int(top_variance_percentage*len(data)))
         # |||||||||||||||||   Create more data
-        launch_barrier()
+        new_training = variance_dataframe.sample(frac=high_variance_kept)[features+[target]]
         # |||||||||||||||||   Append correct indices
+        train_dataset = train_dataset.append(new_training)
+        train_dataset = train_dataset.drop_duplicates()
+        train_features = train_dataset[features]
+        train_target = train_dataset[target]
     # |||||||||||||||||       Compare predicted to a real dataset
-
+    o = multiple_plots(committee, features, target, data, train_dataset)
     print("yeah")
