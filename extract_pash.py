@@ -48,6 +48,44 @@ def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3", start_indice = 0):
 
     return data
 
+def pash_to_type_1_barrier(path, start_indice = 0):
+    '''
+    Takes a pash.dat file given out by type 1 barrier to return the value of barrier
+    :param path: path to file
+    :param start_indice:
+    :return: float
+    '''
+    f = open(path, "r")
+    lines = f.readlines()
+    f.close()
+    line = lines[9]
+    i = 0
+    while i < (len(line)):
+        if line[i] == "-":
+            line = line[:i] + " " + line[i:]
+            i += 1
+        i += 1
+    # Turn the line into a scalars array
+    line = line.strip(" \n")
+    line = re.split(r"\s+", line)
+    line = np.array(line).astype(float)
+    barrier = line[6]
+    return barrier
+
+def pash_type_1_to_dataframe(epsilon, alpha_3, barrier, index, features, target):
+    '''
+    Takes a value of epsilon, alpha_3 and barrier and returns a dataframe with these three values
+    :param epsilon: float
+    :param alpha_3: float
+    :param barrier: float
+    :param barrier: float
+    :param barrier: float
+    :return: DataFrame
+    '''
+    columns = features+[target]
+    data_point = pd.DataFrame([[epsilon, alpha_3, barrier]], index=[index], columns=columns)
+    return data_point
+
 def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
     """
     Takes the DataFrame with the keys of interest to be plotted on a 3D surface
