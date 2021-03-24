@@ -79,7 +79,7 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
     train_features, train_labels, \
     test_features, test_labels \
         = create_datasets(dataset, features, "Barrier", frac=frac)
-
+    print(len(train_features))
     'model-building with the combinations of parameters'
     normalizer = normalize(train_features)
     models = [0] * (len(parameter_combinations_mesh))
@@ -88,7 +88,7 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
     losses_train_hp = [0] * (len(parameter_combinations_mesh))
     losses_test_hp = [0] * (len(parameter_combinations_mesh))
     for i in range(len(parameter_combinations_mesh)):
-        layer = np.ones(parameter_combinations_mesh[i][0]) * parameter_combinations_mesh[i][1]
+        layer = np.ones(parameter_combinations_mesh[i][0], dtype=int) * parameter_combinations_mesh[i][1]
         print("model "+str(i+1)+"/"+str(len(parameter_combinations_mesh)))
         models[i] = build_model(normalizer, layer,
                                 activation=parameter_combinations_mesh[i][4],
