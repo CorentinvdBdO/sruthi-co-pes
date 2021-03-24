@@ -70,5 +70,5 @@ def launch_barrier_type_1(epsilon, alpha_3, index):
     change_input_type_1(epsilon, alpha_3)
     launch_barrier()
     barrier = pash_to_type_1_barrier("barrier/pash.dat")
-    data_point = pash_type_1_to_dataframe(epsilon, alpha_3, barrier, index, ["epsilon", "alpha_3"], "Barrier")
+    data_point = pash_type_1_to_dataframe(epsilon, alpha_3, barrier, index, ["epsilon", "a3"], "Barrier")
     return data_point
