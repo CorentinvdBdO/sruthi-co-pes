@@ -11,15 +11,19 @@ class Committee:
     def build_model(self, normalizer, layers):
         for i in range (self.models_number):
             self.models += [build_model(normalizer, layers)]
-    def fit(self, train_features, train_labels, epochs, verbose = 1, split_train = False):
+    def fit(self, train_features, train_labels, epochs, verbose = 1, split_train = False, bootstrap = None):
         history_list = []
         if split_train:
             n = len(train_features)//self.models_number
         i = 0
         for model in self.models:
             print("train model "+str(i+1)+"/"+str(self.models_number))
-            if split_train:
-                train_features_spec = train_features.sample(frac=1/(self.models_number-i))
+            if type(bootstrap) is float:
+                train_features_spec = train_features.sample(frac=bootstrap)
+                indexes = train_features_spec.index
+                train_labels_spec = train_labels[indexes]
+            elif split_train:
+                train_features_spec = train_features.sample(frac=1./(self.models_number-i))
                 indexes = train_features_spec.index
                 train_labels_spec = train_labels[indexes]
                 train_features = train_features.drop(indexes)

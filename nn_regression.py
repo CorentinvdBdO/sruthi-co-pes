@@ -28,7 +28,10 @@ def create_datasets(data, features, target, frac=0.5):
                         and then separated by features and target
     """
     data = data[features + [target]]
-    train_data = data.sample(frac=frac, random_state=0)
+    if type(frac) is int:
+        train_data = data.sample(n=frac, random_state=0)
+    else:
+        train_data = data.sample(frac=frac, random_state=0)
     test_data = data.drop(train_data.index)
     train_features = train_data.copy()
     test_features = test_data.copy()
@@ -61,7 +64,7 @@ def build_model(normalizer, layers, input_dim = 2, activation='relu', optimizer=
     model = tf.keras.Sequential([normalizer])
     for i in range(len(layers)):
         neurons_no = layers[i]
-        # The first layers need to know the number of inputs
+        # The first layer need to know the number of inputs
         if (i==0):
             model.add(tf.keras.layers.Dense(neurons_no, input_dim=input_dim, activation=activation ))
         else:

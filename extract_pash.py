@@ -9,7 +9,7 @@ import pandas as pd
 import re
 from launch_barrier import launch_barrier, input_template
 
-def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3"):
+def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3", start_indice = 0):
     """
     Takes the path to a pash.dat file and returns a pandas Dataframe
     compatible to run type 2
@@ -29,7 +29,7 @@ def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3"):
     columns[columns == "P(2)"] = new_P2
     # Create an mpty dataframe to be filled
     data = pd.DataFrame(columns=columns)
-    index = 0
+    index = start_indice
     for line in lines[10:]:
         # The following condition adds a space before - signs to avoid number concatenation
         i=0

@@ -2,7 +2,8 @@ from nn_regression import create_datasets, normalize, build_model, learning_curv
 import numpy as np
 from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_contour, plot_points
 import matplotlib.pyplot as plt
-
+from launch_barrier import launch_barrier, change_file_name, input_template
+from committee import Committee
 def change_input(epsilon, alpha3):
     """
     :param epsilon: list : [min, max, n]
@@ -22,5 +23,42 @@ def change_input(epsilon, alpha3):
     f.close()
 
 if __name__ == "__main__":
-    change_input([0.,0.9,100],[-0.2,0.4,100])
+    # |||||||||||||||||   Inputs:
+    goal_variance = 100
+    min_epsilon = 0
+    max_epsilon = .95
+    min_a3 = 0
+    max_a3 = .4
+    initial_size = [10,10]
+    features = ["epsilon", "a3"]
+    target = "Barrier"
+    n_models = 5
+    model_shape = [150, 150, 150]
+    epochs = 1500
+    split_train = True
+    # |||||||||||||||||      Create initial training data
+    input_template('step3')
+    change_input([min_epsilon, max_epsilon, initial_size[0]], [min_a3, max_a3, initial_size[1]])
+    launch_barrier()
+    data = pash_to_dataframe("barrier/pash.dat", features[0], features[1])
+    train_features = data[features]
+    train_target = data[target]
+    # |||||||||||||||||      Create the Committee
+    committee = Committee(n_models)
+    normalizer = normalize(train_features)
+    Committee.build_model(normalizer, model_shape)
+    # |||||||||||||||||       While the mean variance is not good enough:
+    mean_variance = 2*goal_variance
+    while mean_variance > goal_variance:
+        # |||||||||||||||||   Fit the Committee
+        Committee.fit(train_features, train_target, epochs=epochs, verbose=0, split_train=split_train)
+        # |||||||||||||||||   Get Highest variance point
+        list_prediction = Committee.predict(train_features[features])
+        predicted_target, variance = get_mean_var(list_prediction)
+        variance = retransform(data[features], variance)
+        # |||||||||||||||||   Create more data
+        launch_barrier()
+        # |||||||||||||||||   Append correct indices
+    # |||||||||||||||||       Compare predicted to a real dataset
+
     print("yeah")
