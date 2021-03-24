@@ -109,7 +109,7 @@ class HistOnClick:
         plot_histo(Committee, point_features, expected_value, self.ax2)
         self.ax2.figure.canvas.draw()
 
-def multiple_plots(Committee, features, target, data):
+def multiple_plots(Committee, features, target, data, train_dataset):
     list_prediction = Committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
     predicted_target = retransform(data[features], predicted_target)
@@ -150,5 +150,5 @@ if __name__ == "__main__":
     Committee.build_model(normalizer, [100, 100, 100])
     Committee.fit(train_features, train_labels, epochs=2000, verbose=0, split_train=False)
 
-    o = multiple_plots(Committee, features, "Barrier", data)
+    o = multiple_plots(Committee, features, "Barrier", data, train_dataset)
 
