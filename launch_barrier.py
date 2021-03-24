@@ -46,6 +46,20 @@ def change_file_name (name, new_name, in_barrier = True, keep_original = True):
         os.chdir("..")
     return 0
 
+def change_input_type_1(epsilon, alpha_3):
+    """
+    :param epsilon: float
+    :param alpha_3: float
+    :return:
+    """
+    f = open("barrier/barrier.inp", "r")
+    lines = f.readlines()
+    f.close()
+    lines[3]=' epsil={:.4f},alpha1=0.00,alpha2=0.00,alpha3={:.4f},alpha4=-.16D0, /END\n'.format(epsilon,alpha_3)
+    f = open("barrier/barrier.inp", "w")
+    f.write("".join(lines))
+    f.close()
+
 if __name__ == "__main__":
     #input_template("large")
     #launch_barrier()
