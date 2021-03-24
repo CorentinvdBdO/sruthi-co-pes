@@ -25,23 +25,18 @@ def change_input(epsilon, alpha3):
 
 if __name__ == "__main__":
     # |||||||||||||||||   Inputs:
-    goal_variance = 1
-    min_epsilon = 0
-    max_epsilon = .95
-    min_a3 = 0
-    max_a3 = .4
-    initial_size = [10,10]
-    features = ["epsilon", "a3"]
-    target = "Barrier"
-    frac = 120
-    n_models = 5
-    model_shape = [150, 150, 150, 150, 150, 150]
-    epochs = 200
-    batch_size = 30
-    split_train = True
-    bootstrap = 0.8
-    top_variance_percentage = 0.2
-    high_variance_kept = 20
+    goal_variance = 1                 # float        Goal for the maximum variance
+    features = ["epsilon", "a3"]      # [str]        Key argument of the features
+    target = "Barrier"                # str          Key argument of the target
+    frac = 120                        # int or float fraction of the large pash turning into initial training data
+    n_models = 5                      # int          Number of models in the committee
+    model_shape = [150, 150, 150, 150, 150, 150]  #  Shape of the neural networks
+    epochs = 200                      # int          Number of epochs per loop
+    batch_size = 30                   # int          Batch size during the fit
+    split_train = True                # Bool         Split the train set between the models
+    bootstrap = 0.8                   # float        Overwrites split_train : bootstraps with this fraction
+    top_variance_percentage = 0.2     # float        Percentage of the points considered in the high variance
+    high_variance_kept = 20           # int          Number of high variance points that go in the training set
     # |||||||||||||||||      Create initial training data
     # Here, we cheat and use the precomputed 4000 large dataset
     #input_template('step3')
@@ -94,7 +89,7 @@ if __name__ == "__main__":
         # |||||||||||||||||   Create more data
         print("training set of size ", len(train_dataset))
         new_training = variance_dataframe.sample(n=min(high_variance_kept, len(variance_dataframe)))[features+[target]]
-        # |||||||||||||||||   Append correct indices
+        # |||||||||||||||||   Append with correct indices
         train_dataset = train_dataset.append(new_training)
         train_dataset = train_dataset.drop_duplicates()
         train_features = train_dataset[features]
@@ -105,9 +100,9 @@ if __name__ == "__main__":
     plt.xlabel("epoch")
     plt.ylabel("MSE")
     plt.show()
-    plt.plot(epoch_list, variance_stat[0],'+')
-    plt.plot(epoch_list, variance_stat[1],'+')
-    plt.plot(epoch_list, variance_stat[2],'+')
+    plt.plot(epoch_list, variance_stat[0], '+')
+    plt.plot(epoch_list, variance_stat[1], '+')
+    plt.plot(epoch_list, variance_stat[2], '+')
     plt.xlabel("epoch")
     plt.ylabel("variance")
     plt.show()
