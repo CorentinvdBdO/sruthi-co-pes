@@ -16,16 +16,22 @@ class Committee:
             self.models += [build_model(normalizer, layers, optimizer=optimizer)]
     def fit(self, train_features, train_labels, epochs,batch_size=30, verbose = 1, split_train = False, bootstrap = None):
         history_list = []
-        if split_train:
+        if split_train is True:
             n = len(train_features)//self.models_number
         i = 0
-        for model in self.models:
+        for j in range(len(self.models)):
+            model = self.models[j]
             print("train model "+str(i+1)+"/"+str(self.models_number))
-            if type(bootstrap) is float:
+            if type(train_features) is list:
+                # Case where the training set is already splitted
+                train_features_spec = train_features[j]
+                train_labels_spec = train_labels[j]
+            elif type(bootstrap) is float:
                 train_features_spec = train_features.sample(frac=bootstrap)
                 indexes = train_features_spec.index
                 train_labels_spec = train_labels[indexes]
             elif split_train:
+                # Case where we have to split the training set
                 train_features_spec = train_features.sample(frac=1./(self.models_number-i))
                 indexes = train_features_spec.index
                 train_labels_spec = train_labels[indexes]

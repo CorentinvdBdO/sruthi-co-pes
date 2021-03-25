@@ -1,5 +1,5 @@
  &INTDAT IARRAY=0,IPRINT=68,CASSIN=.t.,
     KEYSPE=1,OUTSPE=.T.,TYPERUN=1 /END
  &DYNAMC IZ=92,IN=144,ICHOIC=1,IENDD=1,
- epsil=0.8900,alpha1=0.00,alpha2=0.00,alpha3=0.1500,alpha4=-.16D0, /END
+ epsil=0.8900,alpha1=0.00,alpha2=0.00,alpha3=0.0640,alpha4=-.16D0, /END
 
