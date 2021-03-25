@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from math import sqrt
 from nn_regression import create_datasets, normalize, build_model, learning_curve, retransform, create_empty_dataset
 from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_contour, plot_points
 from committee import Committee, get_mean_var, multiple_plots
@@ -49,10 +50,10 @@ normalizer = normalize(train_features)
 committee.build_model(normalizer, model_shape, optimizer='adamax')
 print('Created models')
 
-'''While the min variance is not good enough'''
+'''While the max_variance is not good enough'''
 max_variance = 2*goal_variance
 variance_stat=[[],[],[]]
-mse_list = []
+rmse_list = []
 epoch_list = [0]
 while max_variance > goal_variance:
     #Fit the Committee
@@ -66,7 +67,7 @@ while max_variance > goal_variance:
     max_variance = np.max(variance)
     predicted_target = np.ravel(predicted_target)
     mse = calculate_mse(predicted_target, data[target])
-    mse_list += [mse]
+    rmse_list += [sqrt(mse)]
     epoch_list += [epoch_list[-1] + epochs]
     variance_stat[0] += [np.max(variance)]
     variance_stat[1] += [np.median(variance)]
