@@ -10,9 +10,9 @@ import re
 
 def input_template(template_name):
     """
-    Change barrier.inp to a template from barrier/template
-    available templates: RUN1, RUN2, RUN3, RUN4, step3, test, type1, type2
-    :param template_name: str name, no path, no .dat
+    Changes barrier.inp to a template from barrier/template.
+    Available templates: RUN1, RUN2, RUN3, RUN4, step3, test, type1, type2
+    :param template_name: (str) name, no path, no .dat
     """
     source = "barrier/input_templates/"+template_name+".inp"
     shutil.copy(source, "barrier/barrier.inp")
@@ -20,9 +20,12 @@ def input_template(template_name):
 
 def change_input(epsilon, alpha3):
     """
-    :param epsilon: list : [min, max, n]
-    :param alpha3: list : [min, max, n]
-    :return:
+    Takes values for epsilon and alpha_3 in the form of lists with min value, max value
+    and the last value is either the number of points needed in between min and max values or the incrementation step.
+    Changes the barrier.inp (of type 2 template) with these input values for epsilon and alpha_3.
+    :param epsilon: (list) [min, max, n]
+    :param alpha3: (list) [min, max, n]
+    :return: None
     """
     if type(epsilon[2]) is int:
         epsilon_step = (epsilon[1]-epsilon[0])/epsilon[2]
@@ -43,7 +46,7 @@ def change_input(epsilon, alpha3):
 
 def launch_barrier ():
     """
-    Launch the barrier.exe code
+    Launches the barrier.exe code.
     """
     os.chdir("barrier")
     subprocess.call("barrier.exe")
@@ -52,13 +55,13 @@ def launch_barrier ():
 
 def change_file_name (name, new_name, pash_to_data = True, keep_original = True):
     """
-    Change file name into new_name
-    Inside the barrier directory by default
-    :param name: old file name
-    :param new_name: new file name
-    :param pash_to_data: if True, will operate from barrier/ to data/pash
-    :param keep_original: if True, will not delete the original file
-    :return:
+    Changes file name into new_name.
+    Inside the barrier directory and while keeping the original file by default.
+    :param name: (str) old file name
+    :param new_name: (str) new file name
+    :param pash_to_data: (bool) if True, will operate from barrier/ to data/pash
+    :param keep_original: (bool) if True, will not delete the original file
+    :return: None
     """
     if pash_to_data:
         name = "barrier/"+name
@@ -68,15 +71,16 @@ def change_file_name (name, new_name, pash_to_data = True, keep_original = True)
     else:
         os.rename(name, new_name)
 
+
 def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3", start_indice = 0):
     """
-    Takes the path to a pash.dat file and returns a pandas Dataframe
-    compatible to run type 2
-    The keys P(1),P(2) are respectively renamed to new_P1, new_P2
-    :param path: str, path to a file
-    :param new_P1: new name for the variable P(1)
-    :param new_P2: new name for the variable P(2)
-    :return: a pandas dataframe containing all the variables and data from the input file
+    Takes the path to a pash.dat file from a type 2 run and returns a pandas DataFrame.
+    The keys P(1),P(2) are respectively renamed to new_P1, new_P2.
+    :param path: (str) path to a file
+    :param new_P1: (str) new name for the variable P(1)
+    :param new_P2: (str) new name for the variable P(2)
+    :param start_indice: (int) first index in the created DataFrame
+    :return data: (pandas DataFrame) DataFrame containing all the variables and data from the input file
     """
     f = open(path, "r")
     lines = f.readlines()
@@ -86,7 +90,7 @@ def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3", start_indice = 0):
     columns = np.array(columns)
     columns[columns == "P(1)"] = new_P1
     columns[columns == "P(2)"] = new_P2
-    # Create an mpty dataframe to be filled
+    # Create an empty DataFrame to be filled
     data = pd.DataFrame(columns=columns)
     index = start_indice
     for line in lines[10:]:
@@ -97,7 +101,7 @@ def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3", start_indice = 0):
                 line = line[:i]+" "+line[i:]
                 i+=1
             i+=1
-        # Turn the line into a scalars array and append it to the dataframe
+        # Turn the line into a scalars array and append it to the DataFrame
         line = line.strip(" \n")
         line = re.split(r"\s+", line)
         line = np.array(line).astype(float)
@@ -107,12 +111,12 @@ def pash_to_dataframe(path, new_P1="epsilon", new_P2="a3", start_indice = 0):
 
     return data
 
-def pash_to_type_1_barrier(path, start_indice=0):
+
+def pash_to_type_1_barrier(path):
     '''
-    Takes a pash.dat file given out by type 1 barrier to return the value of barrier
-    :param path: path to file
-    :param start_indice:
-    :return: float
+    Takes the path to a pash.dat file from a type 1 run and returns the value of fission barrier.
+    :param path: (str) path to file
+    :return barrier: (float) fission barrier value
     '''
     f = open(path, "r")
     lines = f.readlines()
@@ -128,19 +132,22 @@ def pash_to_type_1_barrier(path, start_indice=0):
     line = line.strip(" \n")
     line = re.split(r"\s+", line)
     line = np.array(line).astype(float)
+    # Take only the value for "Barrier"
     barrier = line[6]
     return barrier
 
 
 def pash_type_1_to_dataframe(epsilon, alpha_3, barrier, index, features, target):
     '''
-    Takes a value of epsilon, alpha_3 and barrier and returns a dataframe with these three values
-    :param epsilon: float
-    :param alpha_3: float
-    :param barrier: float
-    :param barrier: float
-    :param barrier: float
-    :return: DataFrame
+    Takes a value of epsilon, alpha_3 and fission barrier and returns a DataFrame of these three values
+    with the line given by index and columns given by features key and target key.
+    :param epsilon: (float) epsilon value
+    :param alpha_3: (float) alpha_3 value
+    :param barrier: (float) fission barrier value
+    :param barrier: (int) index of line in the created DataFrame
+    :param features: (str list) list of keys for features
+    :param target: (str) key for target
+    :return data_point: (pandas DataFrame) DataFrame containing the line with epsilon, alpha_3 and fission barrier
     '''
     columns = features + [target]
     data_point = pd.DataFrame([[epsilon, alpha_3, barrier]], index=[index], columns=columns)
@@ -149,9 +156,11 @@ def pash_type_1_to_dataframe(epsilon, alpha_3, barrier, index, features, target)
 
 def change_input_type_1(epsilon, alpha_3):
     """
-    :param epsilon: float
-    :param alpha_3: float
-    :return:
+    Takes values for epsilon and alpha_3.
+    Changes the barrier.inp (of type 1 template) with these input values for epsilon and alpha_3.
+    :param epsilon: (float) epsilon value
+    :param alpha_3: (float) alpha_3 value
+    :return: None
     """
     f = open("barrier/barrier.inp", "r")
     lines = f.readlines()
@@ -163,11 +172,11 @@ def change_input_type_1(epsilon, alpha_3):
 
 def launch_barrier_type_1(epsilon, alpha_3, index):
     '''
-    Takes a value for epsilon, alpha_3 and an index at which this data should be and returns a DataFrame
-    :param epsilon: float
-    :param alpha_3: float
-    :param index: int
-    :return: DataFrame
+    Takes a value for epsilon, alpha_3 to run barrier.exe (type 1 run) returns a DataFrame with the line given by index.
+    :param epsilon: (float) epsilon value
+    :param alpha_3: (float) alpha_3
+    :param index: (int) index of line in the created DataFrame
+    :return data_point: (pandas DataFrame) DataFrame containing the line with epsilon, alpha_3 and fission barrier
     '''
     input_template("type1")
     change_input_type_1(epsilon, alpha_3)
