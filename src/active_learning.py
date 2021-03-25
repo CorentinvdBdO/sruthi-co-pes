@@ -1,3 +1,9 @@
+"""
+Generates and saves a Committee of neural networks, trained generating data using
+the barrier code where the variance of the networks' output is high.
+
+"""
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -28,7 +34,8 @@ if __name__ == "__main__":
     #                               reshuffled between each iteration between the training sets
     #                               each set is a sample with frac=bootstrap.
     #                               Overwrites bootstrap and split_train
-    name_committee = "active_trained3"
+    name_committee = "active_trained3" # Name under which the committee is stored
+
     '''Create initial empty file from large_pash'''
     # |||||||||||||||||| Create an empty grid:
     alpha3 = np.linspace(alpha_range[0], alpha_range[1], empty_grid_size)

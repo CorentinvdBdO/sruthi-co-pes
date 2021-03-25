@@ -5,7 +5,7 @@ from launch_barrier import pash_to_dataframe
 import tensorflow as tf
 from nn_regression import retransform
 
-def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
+def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1,cmap='plasma'):
     """
     Takes the DataFrame with the keys of interest to be plotted on a 3D surface
     The input data should cover the whole surface (i.e. avoid holes)
@@ -24,7 +24,7 @@ def plot_surface(data, key_1, key_2, key_3, ax = None, alpha = 1):
     if ax is None:
         fig = plt.figure()
         ax = fig.gca(projection='3d')
-    ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha)
+    ax.plot_surface(x, y, z, rstride=1, cstride=1, linewidth=0, antialiased=False, alpha=alpha, cmap=cmap)
     ax.set_xlabel(key_1)
     ax.set_ylabel(key_2)
     ax.set_zlabel(key_3)
