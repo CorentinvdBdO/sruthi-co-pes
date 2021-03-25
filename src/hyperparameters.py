@@ -5,10 +5,10 @@ from launch_barrier import pash_to_dataframe
 
 def calculate_mse(predicted_values, real_values):
     """
-    Takes dataframes to calculate root mean squared error
-    :param predicted_values: dataframe
-    :param real_values: dataframe
-    :return: float
+    Takes DataFrames to calculate the mean squared error between them.
+    :param predicted_values: (pandas DataFrame) estimated values
+    :param real_values: (pandas DataFrame) expected values
+    :return mse: (float) mean squared error
     """
     no_points = len(predicted_values)
     error = predicted_values - real_values
@@ -16,53 +16,65 @@ def calculate_mse(predicted_values, real_values):
     return mse
 
 
-def mse_test(model, train_features, train_labels, test_features, test_labels, epoch_no, n_batch):
+def mse_test(model, train_features, train_target, test_features, test_target, epoch_no, batch_size, epoch_per_fit=10):
     """
-    Takes training datasets, test datasets and number of epochs to give list of losses on test dataset per epoch
-    :param model: keras model
-    :param train_features: dataframe
-    :param train_labels: dataframe
-    :param test_features: dataframe
-    :param test_labels: dataframe
-    :param epoch_no: int
-    :return: list
+    Takes a model, training datasets, test datasets, number of epochs and a batch size
+    and returns a list of losses on training and test dataset calculated every epoch_per_fit epochs.
+    :param model: (keras model) compiled model
+    :param train_features: (pandas DataFrame) training features
+    :param train_target: (pandas DataFrame) training targets
+    :param test_features: (pandas DataFrame) test features
+    :param test_target: (pandas DataFrame) test target
+    :param epoch_no: (int) total number of epochs
+    :param batch_size: (int) batch_size parameter for fit
+    :param epoch_per_fit: (int) number of epochs for every fit at which point we obtain losses - 10 by default
+    :return losses: (float list) list of losses on training set
+    :return losses_test: (float list) list of losses on test set
     """
     losses = []
     losses_test = []
-    epoch_per_fit = 10
     for i in range(epoch_no//epoch_per_fit):
-        history = model.fit(train_features, train_labels, epochs=epoch_per_fit, batch_size=n_batch, verbose=0).history
+        history = model.fit(train_features, train_target, epochs=epoch_per_fit, batch_size=batch_size, verbose=0).history
         losses += history['loss']
         predicted_labels = np.ravel(model.predict(test_features))
-        losses_test.append(calculate_mse(predicted_labels, test_labels))
+        losses_test.append(calculate_mse(predicted_labels, test_target))
     return losses, losses_test
 
-def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batchsize=10, n_epochs=2000,
-                   activation='relu', optimizer='adam', loss='mean_squared_error', frac = 0.5):
+
+def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch_size=10, n_epochs=2000,
+                   activation='relu', optimizer='Adamax', loss='mean_squared_error', frac = 0.5):
     '''
-    Takes dataset, features and a list of values for hyperparameters (takes a default value when no input given) and
+    Takes dataset, keys of features and values for hyperparameters (takes a default value when no input given) and
     returns the loss on training set and the loss on test set per epoch
     and also the final loss reached as a function of the varied hyperparameters
-    :param dataset: dataset
-    :param features: dataset
-    :param n_layers: default int or int list
-    :param n_neurons_per_layer: default int or int list
-    :param batchsize: default int or int list
-    :param n_epochs: default int or int list
-    :param activation: default activation function or string list
-    :param optimizer: default optimizer or string list
-    :return: 4 lists
+    :param dataset: (pandas DataFrame) initial DataFrame
+    :param features: (str list) list of keys of features
+    :param n_layers: (default int or int list) list of different numbers of layers to be tested or 3 by default
+    :param n_neurons_per_layer: (default int or int list) list of different numbers of neurons per layer to be tested
+    or 100 by default
+    :param batch_size: (default int or int list) list of different numbers of batch sizes to be tested or 10 by default
+    :param n_epochs: (default int or int list) list of different numbers of epochs to be tested or 2000 by default
+    :param activation: (default str or str list) list of different activation functions to be tested
+    or 'relu' by default
+    :param optimizer: (default str or str list) list of different optimizers to be tested or 'adamax' by default
+    :param loss: (default str or str list) list of different loss functions to be tested
+    or 'mean_squared_error' by default
+    :param frac: (float) fraction of the data turned into training set - half by default
+    :return losses_train_epoch: (float list) list of losses for training set per epoch
+    :return losses_test_epoch: (float list) list of losses for test set per epoch
+    :return losses_train_hp: (float list) list of final losses for training set for different values of a hyperparameter
+    :return losses_test_hp: (float list) list of final losses for test set for different values of a hyperparameter
     '''
 
     'transform input parameters into arrays'
-    input_parameters = [n_layers, n_neurons_per_layer, batchsize, n_epochs, activation, optimizer, loss]
+    input_parameters = [n_layers, n_neurons_per_layer, batch_size, n_epochs, activation, optimizer, loss]
     for i in range(len(input_parameters)):
         if not (type(input_parameters[i]) == list):
             input_parameters[i] = [input_parameters[i]]
 
     'make an array of all combinations of parameters'
-    parameter_mesh = np.array(np.meshgrid(input_parameters[0], input_parameters[1], input_parameters[2], input_parameters[3], input_parameters[4],
-                                          input_parameters[5], input_parameters[6]))
+    parameter_mesh = np.array(np.meshgrid(input_parameters[0], input_parameters[1], input_parameters[2],
+                            input_parameters[3], input_parameters[4], input_parameters[5], input_parameters[6]))
     parameter_combinations_mesh = parameter_mesh.T.reshape(-1, 7)
     parameter_combinations_mesh = parameter_combinations_mesh.tolist()
     for para in parameter_combinations_mesh:
