@@ -8,26 +8,27 @@ from launch_barrier import launch_barrier_type_1, change_input, pash_to_datafram
 
 if __name__ == "__main__":
     # |||||||||||||||||||||||   Inputs
-    epsilon_range = [-0.1, 0.9, 5]  # [f,f,int]    Range and initial dataset creation
-    alpha_range = [0, 0.2, 5]       # [f,f,int]    Range and initial dataset creation
+    epsilon_range = [-0.1, 0.9, 9]  # [f,f,int]    Range and initial dataset creation
+    alpha_range = [0, 0.2, 9]       # [f,f,int]    Range and initial dataset creation
     empty_grid_size = 101           # int          Variance will be tested on a grid of this size
-    goal_variance = 1               # float        Goal for the maximum variance
+    goal_variance = 0.1               # float        Goal for the maximum variance
     epoch_max = 10000               # int          Epoch at which the training automatically stops
     features = ["epsilon", "a3"]    # [str]        Key argument of the features
     target = "Barrier"              # str          Key argument of the target
-    n_models = 10                   # int          Number of models in the committee
-    model_shape = [150, 150, 150]   # [int]        Shape of the neural networks
+    n_models = 5                    # int          Number of models in the committee
+    model_shape = [150, 150, 150, 150, 150]   # [int]        Shape of the neural networks
     optimizer = 'adamax'            # str          Optimizer of the fit
-    epochs = 300                    # int          Number of epochs per loop
+    epochs = 120                    # int          Number of epochs per loop
     batch_size = 10                 # int          Batch size during the fit
     split_train = True              # Bool         Split the train set between the models
-    bootstrap = 0.5                 # float        Overwrites split_train : bootstraps with this fraction
-    top_variance_percentage = 0.1   # float        Percentage of the points considered in the high variance
+    bootstrap = 0.6                 # float        Overwrites split_train : bootstraps with this fraction
+    top_variance_percentage = 0.2   # float        Percentage of the points considered in the high variance
     high_variance_kept = 20         # int          Number of high variance points that go in the training set
     constant_training_sets = True   # Bool         If True, the training datasets are not
-                                    # reshuffled between each iteration between the training sets
-                                    # each set is a sample with frac=bootstrap.
-                                    # Overwrites bootstrap and split_train
+    #                               reshuffled between each iteration between the training sets
+    #                               each set is a sample with frac=bootstrap.
+    #                               Overwrites bootstrap and split_train
+    name_committee = "active_trained3"
     '''Create initial empty file from large_pash'''
     # |||||||||||||||||| Create an empty grid:
     alpha3 = np.linspace(alpha_range[0], alpha_range[1], empty_grid_size)
@@ -84,7 +85,10 @@ if __name__ == "__main__":
         variance_dataframe = variance_dataframe.head(int(top_variance_percentage * len(data_empty)))
         variance_dataframe = variance_dataframe[variance_dataframe["variance"] > goal_variance]
         # ||||||||||||| Create more training data
-        print("training set of size ", len(train_dataset))
+        if constant_training_sets:
+            print("training set of size ",[len(set) for set in train_dataset])
+        else:
+            print("training set of size ", len(train_dataset))
         new_train_features = variance_dataframe.sample(n=min(high_variance_kept, len(variance_dataframe)))[features]
         new_training = pd.DataFrame(columns=features + [target])
 
@@ -98,18 +102,25 @@ if __name__ == "__main__":
                 a3 = new_train_features.loc[i, features[1]]
                 new_training = new_training.append(launch_barrier_type_1(epsilon, a3, i))
         # Append with correct indices
-        if constant_training_sets and len(new_training) > 0:
-            for i in range(n_models):
-                train_dataset[i] = train_dataset[i].append(new_training.sample(frac=bootstrap))
+        if constant_training_sets:
+            if len(new_training) > 0:
+                new_train_dataset = []
+                for i in range(n_models):
+                    new_train_dataset += [train_dataset[i].append(new_training.sample(frac=bootstrap))]
+            else:
+                new_train_dataset = train_dataset
         else:
             new_train_dataset = train_dataset.append(new_training)
+        save_committee(name_committee + "_temp", committee)
+
+
     if constant_training_sets:
         train_dataset2 = train_dataset[0]
         for i in range(1,n_models):
             train_dataset2 = train_dataset2.append(train_dataset[i])
         train_dataset = train_dataset2.drop_duplicates()
-    train_dataset.to_csv("data/csv/training_active.csv")
-    save_committee("active_trained", committee)
+    train_dataset.to_csv("data/csv/"+name_committee+".csv")
+    save_committee(name_committee, committee)
     '''Compare predicted to a real dataset'''
     data_test = pash_to_dataframe("data/pash/large_pash.dat")
     list_prediction = committee.predict(data_test[features])

@@ -1,0 +1,10 @@
+     ************************************************************
+     * THIS PROGRAM CALCULATES TOTAL DEFORMATION ENERGY OF THE  *
+     * NUCLEUS EMPLOYING AXIALLY DEFORMED WOODS-SAXON POTENTIAL *
+     * AND APPLYING STRUTINSKY SHELL CORRECTION METHOD          *
+     ************************************************************
+     * THE NUCLEUS SHAPE PARAMETERIZATION IS BASED ON CASSINI   *
+     * OVALS, ACCORDING TO V.V.PASHKEVICH:                      *
+     *    [Reports JINR-P4-5581(1971),JINR-P4-4383(1969)]       *
+     *    [Nucl.Phys.A169(1971) 275]                            *
+     ************************************************************

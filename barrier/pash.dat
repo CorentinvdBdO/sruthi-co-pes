@@ -1,10 +1,3 @@
  ******************************************************************************
  * SHELL MODEL - DEFORMED WOODS-SAXON POTENTIAL:  NUCLEUS Z= 92 N=144 A=236   *
- * CENTRAL POTENTIAL-DEPTH VO = -40.2 DIFUSSENESS A=  0.700 RADIUS RO=   8.32 *
- * SPIN-ORBIT POTEN.-DEPTH VSO = 14.1 DIFUSSENESS A=  0.700 RADIUS RV=   7.91 *
- ******************************************************************************
- Eldm- Pashkevich 
-
- EPS= 0.890 a1= 0.000 a3= 0.064 a4=-0.160 a5= 0.000 a6= 0.000 Gn*A=22.5 Gz*A=26.5
-   Eldm   DeltaU(N) DeltaU(P) DeltaP(N) DeltaP(P) Sh.corr.  Barrier    BC   BS
- -12.6780    0.706   -0.395   -1.348    0.124     -0.9136 -13.5916  0.812  1.279
+ * CENTRAL POTENTIAL-DEPTH VO = -45.9 DIFUSSENESS A=  0.630 RADIUS RO=   7.66 *
