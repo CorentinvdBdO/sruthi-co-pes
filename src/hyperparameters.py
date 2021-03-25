@@ -2,19 +2,7 @@ import numpy as np
 from nn_regression import create_datasets, normalize, build_model, convergence_time
 import matplotlib.pyplot as plt
 from launch_barrier import pash_to_dataframe
-
-def calculate_mse(predicted_values, real_values):
-    """
-    Takes DataFrames to calculate the mean squared error between them.
-    :param predicted_values: (pandas DataFrame) estimated values
-    :param real_values: (pandas DataFrame) expected values
-    :return mse: (float) mean squared error
-    """
-    no_points = len(predicted_values)
-    error = predicted_values - real_values
-    mse = np.sum(error * error) / no_points
-    return mse
-
+from analysis import calculate_mse
 
 def mse_test(model, train_features, train_target, test_features, test_target, epoch_no, batch_size, epoch_per_fit=10):
     """
