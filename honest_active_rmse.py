@@ -10,16 +10,16 @@ from launch_barrier_type1 import launch_barrier_type_1
 
 '''Inputs'''
 goal_variance = 1                 # float        Goal for the maximum variance
-goal_rmse = 0.2                   # float        Goal for the root mean squared error
+goal_rmse_train = 0.01             # float        Goal for the root mean squared error
 features = ["epsilon", "a3"]      # [str]        Key argument of the features
 target = "Barrier"                # str          Key argument of the target
 frac = 120                        # int or float fraction of the large pash turning into initial training data
-n_models = 5                      # int          Number of models in the committee
-model_shape = [150, 150, 150, 150, 150, 150]  #  Shape of the neural networks
+n_models = 10                      # int          Number of models in the committee
+model_shape = [150, 150, 150]  #  Shape of the neural networks
 epochs = 200                      # int          Number of epochs per loop
 batch_size = 30                   # int          Batch size during the fit
 split_train = True                # Bool         Split the train set between the models
-bootstrap = 0.8                   # float        Overwrites split_train : bootstraps with this fraction
+bootstrap = 0.5                   # float        Overwrites split_train : bootstraps with this fraction
 top_variance_percentage = 0.2     # float        Percentage of the points considered in the high variance
 high_variance_kept = 20           # int          Number of high variance points that go in the training set
 
@@ -53,20 +53,31 @@ print('Created models')
 
 '''While the mse on training set is not good enough'''
 
-max_variance = 2*goal_variance
-rmse_list = []
+rmse_train_list = []
+rmse_test_list = []
 epoch_list = [0]
+points_calculated = len(train_dataset)
 
 committee.fit(train_features, train_target, epochs=epochs, batch_size=batch_size,
                   verbose=0, bootstrap=bootstrap, split_train=split_train)
+
+#Rmse of prediction on whole dataset
 list_prediction = committee.predict(data[features])
 predicted_target, variance = get_mean_var(list_prediction)
 max_variance = np.max(variance)
 predicted_target = np.ravel(predicted_target)
-rmse = sqrt(calculate_mse(predicted_target, data_check[target]))
-rmse_list += [rmse]
+rmse_test = sqrt(calculate_mse(predicted_target, data_check[target]))
+rmse_test_list += [rmse_test]
 
-while rmse > goal_rmse:
+#Rmse on training dataset
+train_prediction = committee.predict(train_features)
+predicted_target_train, _ = get_mean_var(train_prediction)
+predicted_target_train = np.ravel(predicted_target_train)
+rmse_train = sqrt(calculate_mse(predicted_target_train, train_target))
+rmse_train_list += [rmse_train]
+
+
+while (rmse_train > goal_rmse_train) and (epoch_list[-1]<10000):
     #Take the top 20% high variance
     variance_dataframe = retransform(data[features + [target]], variance, target_keys=['variance'])
     variance_dataframe = variance_dataframe.sort_values(by='variance', ascending=False)
@@ -86,6 +97,7 @@ while rmse > goal_rmse:
     train_dataset = train_dataset.append(new_training)
     train_dataset = train_dataset.drop_duplicates()
     train_dataset = train_dataset.reset_index(drop=True)
+    points_calculated = len(train_dataset)
     train_features = train_dataset[features]
     train_target = train_dataset[target]
     #Fit committee
@@ -93,20 +105,28 @@ while rmse > goal_rmse:
     committee.fit(train_features, train_target, epochs=epochs, batch_size=batch_size,
                   verbose=0, bootstrap=bootstrap, split_train=split_train)
     print("fitted Committee")
-    #Get new rmse and max_variance
+    #Get new rmse and max_variance for predictions on whole dataset
     list_prediction = committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
     max_variance = np.max(variance)
     predicted_target = np.ravel(predicted_target)
-    rmse = sqrt(calculate_mse(predicted_target, data_check[target]))
-    rmse_list += [rmse]
+    rmse_test = sqrt(calculate_mse(predicted_target, data_check[target]))
+    rmse_test_list += [rmse_test]
     epoch_list += [epoch_list[-1] + epochs]
+    #Get new rmse on training dataset
+    train_prediction = committee.predict(train_features)
+    predicted_target_train, _ = get_mean_var(train_prediction)
+    predicted_target_train = np.ravel(predicted_target_train)
+    rmse_train = sqrt(calculate_mse(predicted_target_train, train_target))
+    rmse_train_list += [rmse_train]
+
 
 '''Compare predicted to a real dataset'''
-plt.plot(epoch_list, rmse_list, '+')
+print("Number of points calculated = ", points_calculated)
+plt.plot(epoch_list, rmse_test_list, 'b+')
+plt.plot(epoch_list, rmse_train_list, 'g+')
 plt.xlabel("epoch")
-plt.ylabel("MSE")
+plt.ylabel("RMSE")
 plt.show()
-o = multiple_plots(committee, features, target, data, train_dataset)
 
 
