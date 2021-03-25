@@ -1,23 +1,9 @@
-import os
 import shutil
 import tensorflow as tf
 import numpy as np
-from extract_pash import pash_to_dataframe, plot_surface
+from launch_barrier import pash_to_dataframe
 import matplotlib.pyplot as plt
 import pandas as pd
-
-def dataframe_to_dataset(dataframe, features, targets):
-    """
-    Turns a pandas dataframe into a tensorflow dataset
-    :param dataframe: pandas dataframe
-    :param features: str or list of str out of dataframe's columns
-    :param targets: str or list of str out of dataframe's columns
-    :return: dataset
-    """
-    dataset = (tf.data.Dataset.from_tensor_slices((
-        dataframe[features].values,
-        dataframe[targets].values)))
-    return dataset
 
 def create_datasets(data, features, target, frac=0.5):
     """
@@ -41,27 +27,6 @@ def create_datasets(data, features, target, frac=0.5):
     test_target = test_features.pop(target)
     return train_data, test_data, train_features, train_target, test_features,test_target
 
-def create_empty_dataset(path_src, path_dst):
-    '''
-    Takes a path to a file to copy and make empty
-    :param path_src: file to be copied
-    :param path_dst: copied, empty file
-    :return:
-    '''
-    shutil.copy(path_src, path_dst)
-    dataset = pash_to_dataframe(path_dst, new_P1="epsilon", new_P2="a3", start_indice=0)
-    f = open(path_dst, "r")
-    lines = f.readlines()
-    f.close()
-    number_lines = len(lines)
-    for i in range(10,number_lines):
-        epsilon = dataset.loc[i-10,"epsilon"]
-        a3 = dataset.loc[i-10,"a3"]
-        lines[i] = ' {:.4f} {:.4f}  {:.4f}  {:.4f} {:.4f}   {:.4f}   {:.4f}  {:.4f}  {:.4f} {:.4f}  {:.4f}\n'.format(epsilon,a3,0,0,0,0,0,0,0,0,0)
-    f = open(path_dst, "w")
-    f.write("".join(lines))
-    f.close()
-    return 0
 
 def normalize(data):
     """
@@ -97,13 +62,19 @@ def build_model(normalizer, layers, input_dim = 2, activation='relu', optimizer=
     model.compile(loss=loss, optimizer=optimizer)
     return model
 
-def learning_curve(history):
+def learning_curve(losses, ax=plt.gca(), log=False, y="Loss", title="Learning curve and convergence time"):
     """
     plot Loss = f(epochs)
     :param losses: History.history, output of a fit.
     """
-    losses = history['loss']
-    plt.plot(losses)
+    ax.plot(losses, "+")
+    ax.set_ylabel(title)
+    ax.set_xlabel("epoch")
+    ax.set_title(title)
+    time = convergence_time(losses)
+    plt.vlines(time, 0, max(losses), colors="r")
+    if log:
+        ax.set_yscale("log")
 
 def convergence_time(losses):
     """
@@ -115,7 +86,7 @@ def convergence_time(losses):
     for i in range(len(losses)):
         rest = losses[i:]
         rest = np.mean(rest)
-        if losses[i] < rest:
+        if losses[i] <= rest:
             return i
         return len(losses)-1
 
@@ -130,38 +101,23 @@ def retransform(data, predicted_target, target_keys=["Barrier"]):
     retransformed_data = data.join(pd.DataFrame(predicted_target, columns=target_keys))
     return retransformed_data
 
-def plot_surface_diff(data1,data2, key1, key2, key3, ax = None):
-    """
-    Plot the surface difference between key3 of dataframes 1 & 2
-    :param data1: dataframe
-    :param data2: dataframe
-    :param key1: x axis
-    :param key2: y axis
-    :param key3: z axis of the graph, on which the difference is made
-    :param ax: on which the surface is plotted
-    """
-    diff = data1[key3] - data2[key3]
-    data_diff = retransform(data1[[key1, key2]], diff)
-    plot_surface(data_diff, key1, key2, key3, ax)
+
 
 if __name__ == "__main__":
-    # Get the data
-    data =pash_to_dataframe("barrier/pash_step3new.dat")
+    # Get data
+    data =pash_to_dataframe("data/pash/large_pash.dat")
     train_dataset, test_dataset, \
         train_features, train_labels, \
         test_features, test_labels \
-        = create_datasets(data, ["epsilon", "a3"], "Barrier", frac=0.5)
-    print(train_dataset, data, test_dataset)
+        = create_datasets(data, ["epsilon", "a3"], "Barrier", frac=0.1)
+    # Build model
     normalizer = normalize(train_features)
-    model = build_model(normalizer, [100, 100, 100])
-    history = model.fit(train_features, train_labels, epochs=5000).history
-    time =convergence_time(history['loss'])
-    plt.vlines(time, 0, 10, colors="r")
-    learning_curve(history)
-    plt.yscale("log")
+    model = build_model(normalizer, [150, 150, 150], optimizer="adamax")
+    # Fit model
+    losses = model.fit(train_features, train_labels, epochs=1000).history['loss']
+    # Save model
+    model.save("data/models/example_NN")
+    # Plot the learning curve
+    learning_curve(losses, y="MSE", log= not (0 in losses))
+    plt.show()
 
-    plt.ylabel("MSE")
-    plt.xlabel("epoch")
-    plt.show()
-    plt.plot(test_labels, model.predict(test_features), '.')
-    plt.show()

@@ -1,13 +1,7 @@
-import tensorflow as tf
 import numpy as np
-import math
-from extract_pash import pash_to_dataframe
-import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
-from launch_barrier import launch_barrier, input_template
 from nn_regression import create_datasets, normalize, build_model, convergence_time
-
+import matplotlib.pyplot as plt
+from launch_barrier import pash_to_dataframe
 
 def calculate_mse(predicted_values, real_values):
     """
@@ -101,7 +95,6 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
                                                      test_features, test_labels,
                                                      parameter_combinations_mesh[i][3],
                                                      parameter_combinations_mesh[i][2])
-        print("done")
         losses_train_epoch[i] = loss_train_epoch
         losses_test_epoch[i] = loss_test_epoch
         losses_train_hp[i] = loss_train_epoch[convergence_time(loss_train_epoch)]
@@ -109,4 +102,29 @@ def hyper_analysis(dataset, features, n_layers=3, n_neurons_per_layer=100, batch
 
     return losses_train_epoch, losses_test_epoch, losses_train_hp, losses_test_hp
 
+if __name__ == "__main__":
+    # Import data
+    dataset = pash_to_dataframe("data/pash/large_pash.dat")
+    features = ["epsilon", "a3"]
 
+    # Analysis of the different optimizers
+    loss_train_epoch, loss_test_epoch, loss_train_hp, loss_test_hp = hyper_analysis(
+        dataset, features,
+        n_neurons_per_layer=150,
+        n_layers=3,
+        n_epochs=2000,
+        frac=0.1,
+        optimizer=['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl'])
+
+    #plot the analysis
+    opt = [1, 2, 3, 4, 5, 6, 7, 8]
+    optimizer = ['SGD', 'RMSprop', 'Adam', 'Adadelta', 'Adagrad', 'Adamax', 'Nadam', 'Ftrl']
+
+    plt.plot(opt, loss_train_hp, 'g+')
+    plt.plot(opt, loss_test_hp, 'b+')
+    plt.xticks(opt, optimizer)
+    plt.title("Loss as a function of different optimizers")
+    plt.ylabel("Loss at the end of training")
+    plt.xlabel("Optimizers")
+
+    plt.show()

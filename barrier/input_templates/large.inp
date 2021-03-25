@@ -1,7 +1,7 @@
  &INTDAT IARRAY=0,IPRINT=68,CASSIN=.t.,
     KEYSPE=1,OUTSPE=.T.,TYPERUN=2 /END
  &DYNAMC IZ=92,IN=144,ICHOIC=2,IENDD=1,epsil=0.10D0,,alpha4=-0.16,
-   vareps=.t.,beg1v=0.00,step1v=0.010,end1v=0.950,
-   varp3=.t., beg2v=-0.01,step2v=0.01,end2v=0.400 /END
+   vareps=.t.,beg1v=-0.10,step1v=0.01,end1v=0.900,
+   varp3=.t., beg2v=0.00,step2v=0.005,end2v=0.200 /END
 
 

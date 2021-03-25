@@ -1,8 +1,11 @@
-from nn_regression import create_datasets, normalize, build_model, learning_curve, retransform
+from nn_regression import create_datasets, normalize, build_model, retransform
 import numpy as np
-from extract_pash import pash_to_dataframe, plot_surface, plot_heatmap, plot_contour, plot_points
+from analysis import pash_to_dataframe, plot_contour, plot_points
 import matplotlib.pyplot as plt
 from hyperparameters import calculate_mse
+import os
+import shutil
+import tensorflow as tf
 
 class Committee:
     def __init__(self, models_number):
@@ -55,10 +58,15 @@ def plot_histo (committee, point_features, expected_value, ax=plt.gca()):
     n, b, p= ax.hist(predicted_list)
     ax.vlines(expected_value, 0, max(n), colors="r")
     ax.vlines(np.mean(predicted_list), 0, max(n), colors="g")
-    return 0
+    ax.set_xlabel('Barrier')
 
 
 class HistOnClick:
+    """
+    This class makes the histogram of the values for a point, predicted
+    by different models of the committee when the point is clicked.
+    In addition there are the mean predicted value and the expected value.
+    """
     def __init__(self, ax1, ax2, committee, data, features, target, in_order = True):
         self.committee = committee
         self.ax1 = ax1
@@ -110,7 +118,7 @@ class HistOnClick:
         plot_histo(self.committee, point_features, expected_value, self.ax2)
         self.ax2.figure.canvas.draw()
 
-def multiple_plots(committee, features, target, data, train_dataset):
+def interactive_plots(committee, features, target, data, train_dataset):
     list_prediction = committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
     predicted_target = retransform(data[features], predicted_target)
@@ -118,7 +126,7 @@ def multiple_plots(committee, features, target, data, train_dataset):
 
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
 
-    plot_contour(variance, features[0], features[1], target, colorbar=True, ax=ax1, bar_name="Variance")
+    plot_contour(variance, features[0], features[1], target, colorbar=True, levels=40, ax=ax1, bar_name="Variance")
     plot_contour(predicted_target, features[0], features[1], target, colorbar=True, levels=40, ax=ax3,
                  bar_name="Predicted Barrier")
 
@@ -137,24 +145,53 @@ def multiple_plots(committee, features, target, data, train_dataset):
     plt.show()
     return object
 
+def save_committee(dir_name, committee):
+    os.chdir("data/models/")
+    if dir_name in os.listdir():
+        shutil.rmtree(dir_name)
+    os.mkdir(dir_name)
+    os.chdir(dir_name)
+    i = 0
+    for model in committee.models:
+        model.save("model"+str(i))
+        i += 1
+    os.chdir("../../..")
+
+def load_committee(dir_name):
+    models = []
+    n_models = 0
+    os.chdir("data/models/"+dir_name)
+    for filename in os.listdir():
+        models+=[tf.keras.models.load_model(filename)]
+        n_models+=1
+    committee = Committee(n_models)
+    committee.models = models
+    os.chdir("../../..")
+    return committee
+
 if __name__ == "__main__":
+    # Get the data
     features = ["epsilon", "a3"]
-    data = pash_to_dataframe("barrier/large_pash.dat")
+    data = pash_to_dataframe("data/pash/large_pash.dat")
     train_dataset, test_dataset, \
     train_features, train_labels, \
     test_features, test_labels \
-        = create_datasets(data, features, "Barrier", frac=383)
-
-    committee = Committee(10)
-
+        = create_datasets(data, features, "Barrier", frac=0.1)
+    # Create a committee
+    committee = Committee(15)
     normalizer = normalize(train_features)
     committee.build_model(normalizer, [150, 150, 150], optimizer="adamax")
-    committee.fit(train_features, train_labels, epochs=6000, verbose=0, bootstrap=.5)
-
+    # Fit on the data
+    committee.fit(train_features, train_labels, epochs=2, verbose=0, bootstrap=.5)
+    # Example on saving and loading a committee
+    save_committee("testing", committee)
+    committee = load_committee("testing")
+    # Compute the MSE
     list_prediction = committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
     predicted_target = np.ravel(predicted_target)
-    mse = calculate_mse(predicted_target, data["Barrier"])
-    print("mse ", mse)
-    o = multiple_plots(committee, features, "Barrier", data, train_dataset)
+    rmse = np.sqrt(calculate_mse(predicted_target, data["Barrier"]))
+    print("rmse ", rmse, "MeV")
+    # Plot the variance, the prediction, difference with expected values and the histograms
+    o = interactive_plots(committee, features, "Barrier", data, train_dataset)
 
