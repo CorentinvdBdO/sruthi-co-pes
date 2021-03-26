@@ -124,7 +124,7 @@ class HistOnClick:
         plot_histo(self.committee, point_features, expected_value, self.ax2)
         self.ax2.figure.canvas.draw()
 
-def interactive_plots(committee, features, target, data, train_dataset):
+def interactive_plots(committee, features, target, data, train_dataset, plot_train=True):
     list_prediction = committee.predict(data[features])
     predicted_target, variance = get_mean_var(list_prediction)
     predicted_target = retransform(data[features], predicted_target)
@@ -141,9 +141,10 @@ def interactive_plots(committee, features, target, data, train_dataset):
     plot_contour(data_diff, features[0], features[1], target, colorbar=True, ax=ax4, levels=40,
                  bar_name="Barrier difference with expected")
 
-    plot_points(train_dataset, features, ax1)
-    plot_points(train_dataset, features, ax3)
-    plot_points(train_dataset, features, ax4)
+    if plot_train:
+        plot_points(train_dataset, features, ax1)
+        plot_points(train_dataset, features, ax3)
+        plot_points(train_dataset, features, ax4)
 
     pointer, = ax1.plot([0], [0], "+")
     object = HistOnClick(pointer, ax2, committee, data, features, target)
@@ -183,14 +184,19 @@ if __name__ == "__main__":
     train_features, train_labels, \
     test_features, test_labels \
         = create_datasets(data, features, "Barrier", frac=0.1)
+    print("Loaded data")
     # Create a committee
-    committee = Committee(15)
+    """
+    committee = Committee(50)
     normalizer = normalize(train_features)
     committee.build_model(normalizer, [150, 150, 150], optimizer="adamax")
     # Fit on the data
-    committee.fit(train_features, train_labels, epochs=2, verbose=0, bootstrap=.5)
+    committee.fit(train_features, train_labels, epochs=2000, verbose=0, bootstrap=.1)
     # Example on saving and loading a committee
+    print("Saving model")
     save_committee("testing", committee)
+    """
+    print("Loading model")
     committee = load_committee("testing")
     # Compute the MSE
     list_prediction = committee.predict(data[features])
@@ -199,5 +205,5 @@ if __name__ == "__main__":
     rmse = np.sqrt(calculate_mse(predicted_target, data["Barrier"]))
     print("rmse ", rmse, "MeV")
     # Plot the variance, the prediction, difference with expected values and the histograms
-    o = interactive_plots(committee, features, "Barrier", data, train_dataset)
+    o = interactive_plots(committee, features, "Barrier", data, train_dataset, plot_train=False)
 
