@@ -1,6 +1,6 @@
 """
 Generates and saves a Committee of neural networks, trained generating data using
-the barrier code where the variance of the networks' output is high.
+the barrier code where the variance of the networks' output is high
 """
 
 import numpy as np

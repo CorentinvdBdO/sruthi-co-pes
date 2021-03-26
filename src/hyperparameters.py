@@ -1,3 +1,6 @@
+"""
+Function to compare hyperparameters
+"""
 import numpy as np
 from nn_regression import create_datasets, normalize, build_model, convergence_time
 import matplotlib.pyplot as plt

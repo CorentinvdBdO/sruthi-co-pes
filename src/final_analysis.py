@@ -1,5 +1,5 @@
 """
-This file simply load a committee to study its results.
+This file simply loads a committee to study its results
 """
 from committee import load_committee, interactive_plots, get_mean_var
 from analysis import calculate_mse, plot_surface_diff, plot_surface

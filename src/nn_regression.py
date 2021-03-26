@@ -1,3 +1,6 @@
+"""
+Functions to manipulate DataFrames for a keras fit, to build models quickly and work on the learning curves
+"""
 import tensorflow as tf
 import numpy as np
 from launch_barrier import pash_to_dataframe

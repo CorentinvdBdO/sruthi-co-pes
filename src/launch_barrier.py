@@ -1,5 +1,5 @@
 """
-Functions used to deal with the barrier code
+Functions to change the input and run the barrier code and store its data output
 """
 import subprocess
 import os
