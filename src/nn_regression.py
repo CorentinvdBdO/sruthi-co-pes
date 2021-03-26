@@ -1,5 +1,5 @@
 """
-Functions used to manipulate DataFrames for a keras fit, to build models quickly and work on the learning curves.
+Functions to manipulate DataFrames for a keras fit, to build models quickly and work on the learning curves
 """
 import tensorflow as tf
 import numpy as np

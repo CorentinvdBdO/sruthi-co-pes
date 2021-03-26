@@ -1,3 +1,6 @@
+"""
+Functions to simplify generations of different kinds of plots
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
