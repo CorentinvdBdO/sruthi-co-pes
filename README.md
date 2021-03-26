@@ -24,7 +24,7 @@ numpy
 matplotlib.pyplot
 scipy
 pandas
-Tensorflow.keras
+tensorflow.keras
 
 ## File organisation
 
