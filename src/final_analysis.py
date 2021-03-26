@@ -1,5 +1,5 @@
 """
-This file simply load a committee to study its results
+This file simply load a committee to study its results.
 """
 from committee import load_committee, interactive_plots, get_mean_var
 from analysis import calculate_mse, plot_surface_diff, plot_surface
@@ -11,7 +11,7 @@ import pandas as pd
 
 if __name__ == '__main__':
     features = ["epsilon", "a3"]
-    model_name = "active_trained6"
+    model_name = "active_trained2"
     print("Loading committee ", model_name)
     committee = load_committee(model_name)
     print("Loaded committee of ", committee.models_number, " models.")

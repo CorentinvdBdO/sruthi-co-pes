@@ -18,7 +18,7 @@ class Committee:
     def __init__(self, models_number):
         """
         Initialzations
-        :param models_number: number of models in the committee
+        :param models_number: (int) number of models in the committee
         """
         self.models_number = models_number
         self.models = []
@@ -26,10 +26,10 @@ class Committee:
         """
         Build and compile the models of the committee
         :param normalizer: the first normalizer layer of the models
-        :param layers: list of ints, [# neurons in layer1, ... # neurons in layern]
+        :param layers: (int list) [# neurons in layer1, ... # neurons in layern]
                         containing the shape of the networks
-        :param optimizer: Optimizer of the backpropagation
-        :return: nothing
+        :param optimizer: (str) Optimizer of the backpropagation
+        :return: None
         """
         for i in range (self.models_number):
             self.models += [build_model(normalizer, layers, optimizer=optimizer)]

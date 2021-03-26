@@ -1,4 +1,3 @@
-import shutil
 import tensorflow as tf
 import numpy as np
 from launch_barrier import pash_to_dataframe
