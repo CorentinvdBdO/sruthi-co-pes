@@ -1,0 +1,113 @@
+\hypertarget{namespaceanalysis}{}\doxysection{analysis Namespace Reference}
+\label{namespaceanalysis}\index{analysis@{analysis}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespaceanalysis_a5ea3762ae72048f211c24909ed0ef51f}{plot\+\_\+surface}} (data, key\+\_\+1, key\+\_\+2, key\+\_\+3, ax=None, alpha=1, cmap=\textquotesingle{}plasma\textquotesingle{})
+\item 
+def \mbox{\hyperlink{namespaceanalysis_a2c3996896c147ad59915b06b5f20018e}{plot\+\_\+surface\+\_\+diff}} (data1, data2, key1, key2, key3, ax=None)
+\item 
+def \mbox{\hyperlink{namespaceanalysis_a3666c06612800b77c3a56fdec88399ce}{plot\+\_\+contour}} (data, key\+\_\+1, key\+\_\+2, key\+\_\+3, levels=6, ax=plt.\+gca(), cmap=\char`\"{}hot\char`\"{}, colorbar=True, bar\+\_\+name=None)
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a55b881f85b6826a3e57a84726e39f69e}\label{namespaceanalysis_a55b881f85b6826a3e57a84726e39f69e}} 
+def {\bfseries plot\+\_\+points} (data, features, ax=plt.\+gca())
+\item 
+def \mbox{\hyperlink{namespaceanalysis_ada0f23ca351c1000298ae39bf0a9d7ba}{calculate\+\_\+mse}} (predicted\+\_\+values, real\+\_\+values)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_acba61bcf71d3fab9e9182263b646a7ad}\label{namespaceanalysis_acba61bcf71d3fab9e9182263b646a7ad}} 
+list {\bfseries features} = \mbox{[}\char`\"{}epsilon\char`\"{}, \char`\"{}a3\char`\"{}\mbox{]}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a8e5c6c55793a8249397435e05eda6968}\label{namespaceanalysis_a8e5c6c55793a8249397435e05eda6968}} 
+{\bfseries data} = pash\+\_\+to\+\_\+dataframe(\char`\"{}data/pash/large\+\_\+pash.\+dat\char`\"{})
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a5e6226b4d2ca901a966b478ac3700cf7}\label{namespaceanalysis_a5e6226b4d2ca901a966b478ac3700cf7}} 
+{\bfseries model} = tf.\+keras.\+models.\+load\+\_\+model(\char`\"{}data/models/example\+\_\+\+NN\char`\"{})
+\item 
+\mbox{\Hypertarget{namespaceanalysis_aa1d2f53f825da3f67e739e414329a0cf}\label{namespaceanalysis_aa1d2f53f825da3f67e739e414329a0cf}} 
+{\bfseries predicted\+\_\+values} = model.\+predict(data\mbox{[}features\mbox{]})
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a8a62c29d4fe5bacda46eb062097c42e6}\label{namespaceanalysis_a8a62c29d4fe5bacda46eb062097c42e6}} 
+{\bfseries ax1}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a3ee7acf871ad45e0b0ada0c00d49f939}\label{namespaceanalysis_a3ee7acf871ad45e0b0ada0c00d49f939}} 
+{\bfseries ax2}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_add7f1e7251badf2ad67995fe8e0d5600}\label{namespaceanalysis_add7f1e7251badf2ad67995fe8e0d5600}} 
+{\bfseries bar\+\_\+name}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_ad69637c22b3bc7462d3cac26fa24a555}\label{namespaceanalysis_ad69637c22b3bc7462d3cac26fa24a555}} 
+{\bfseries ax}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a72da4a4ec89cf493a8b55e24663a8dae}\label{namespaceanalysis_a72da4a4ec89cf493a8b55e24663a8dae}} 
+{\bfseries levels}
+\item 
+\mbox{\Hypertarget{namespaceanalysis_a144bde142c589e203e099d3913ad9901}\label{namespaceanalysis_a144bde142c589e203e099d3913ad9901}} 
+{\bfseries RMSE} = np.\+sqrt(\mbox{\hyperlink{namespaceanalysis_ada0f23ca351c1000298ae39bf0a9d7ba}{calculate\+\_\+mse}}(predicted\+\_\+values\mbox{[}\textquotesingle{}Barrier\textquotesingle{}\mbox{]}, data\mbox{[}\textquotesingle{}Barrier\textquotesingle{}\mbox{]}))
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Functions to simplify generations of different kinds of plots
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceanalysis_ada0f23ca351c1000298ae39bf0a9d7ba}\label{namespaceanalysis_ada0f23ca351c1000298ae39bf0a9d7ba}} 
+\index{analysis@{analysis}!calculate\_mse@{calculate\_mse}}
+\index{calculate\_mse@{calculate\_mse}!analysis@{analysis}}
+\doxysubsubsection{\texorpdfstring{calculate\_mse()}{calculate\_mse()}}
+{\footnotesize\ttfamily def analysis.\+calculate\+\_\+mse (\begin{DoxyParamCaption}\item[{}]{predicted\+\_\+values,  }\item[{}]{real\+\_\+values }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes dataframes to calculate root mean squared error
+:param predicted_values: dataframe
+:param real_values: dataframe
+:return: float
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceanalysis_a3666c06612800b77c3a56fdec88399ce}\label{namespaceanalysis_a3666c06612800b77c3a56fdec88399ce}} 
+\index{analysis@{analysis}!plot\_contour@{plot\_contour}}
+\index{plot\_contour@{plot\_contour}!analysis@{analysis}}
+\doxysubsubsection{\texorpdfstring{plot\_contour()}{plot\_contour()}}
+{\footnotesize\ttfamily def analysis.\+plot\+\_\+contour (\begin{DoxyParamCaption}\item[{}]{data,  }\item[{}]{key\+\_\+1,  }\item[{}]{key\+\_\+2,  }\item[{}]{key\+\_\+3,  }\item[{}]{levels = {\ttfamily 6},  }\item[{}]{ax = {\ttfamily plt.gca()},  }\item[{}]{cmap = {\ttfamily \char`\"{}hot\char`\"{}},  }\item[{}]{colorbar = {\ttfamily True},  }\item[{}]{bar\+\_\+name = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Plot a contour graph of the input data
+:param data: a DataFrame
+:param key_1: x axis' key of the DataFrame
+:param key_2: y axis' key of the DataFrame
+:param key_3: z axis' key of the DataFrame
+:param ax: if given, figure will be plotted on it
+:return:
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceanalysis_a5ea3762ae72048f211c24909ed0ef51f}\label{namespaceanalysis_a5ea3762ae72048f211c24909ed0ef51f}} 
+\index{analysis@{analysis}!plot\_surface@{plot\_surface}}
+\index{plot\_surface@{plot\_surface}!analysis@{analysis}}
+\doxysubsubsection{\texorpdfstring{plot\_surface()}{plot\_surface()}}
+{\footnotesize\ttfamily def analysis.\+plot\+\_\+surface (\begin{DoxyParamCaption}\item[{}]{data,  }\item[{}]{key\+\_\+1,  }\item[{}]{key\+\_\+2,  }\item[{}]{key\+\_\+3,  }\item[{}]{ax = {\ttfamily None},  }\item[{}]{alpha = {\ttfamily 1},  }\item[{}]{cmap = {\ttfamily \textquotesingle{}plasma\textquotesingle{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes the DataFrame with the keys of interest to be plotted on a 3D surface
+The input data should cover the whole surface (i.e. avoid holes)
+:param data: a DataFrame
+:param key_1: x axis' key of the DataFrame
+:param key_2: y axis' key of the DataFrame
+:param key_3: z axis' key of the DataFrame
+:param ax: if given, figure will be plotted on it
+:param alpha: transparency of the surface
+:return: Nothing
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceanalysis_a2c3996896c147ad59915b06b5f20018e}\label{namespaceanalysis_a2c3996896c147ad59915b06b5f20018e}} 
+\index{analysis@{analysis}!plot\_surface\_diff@{plot\_surface\_diff}}
+\index{plot\_surface\_diff@{plot\_surface\_diff}!analysis@{analysis}}
+\doxysubsubsection{\texorpdfstring{plot\_surface\_diff()}{plot\_surface\_diff()}}
+{\footnotesize\ttfamily def analysis.\+plot\+\_\+surface\+\_\+diff (\begin{DoxyParamCaption}\item[{}]{data1,  }\item[{}]{data2,  }\item[{}]{key1,  }\item[{}]{key2,  }\item[{}]{key3,  }\item[{}]{ax = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Plot the surface difference between key3 of dataframes 1 & 2
+:param data1: dataframe
+:param data2: dataframe
+:param key1: x axis
+:param key2: y axis
+:param key3: z axis of the graph, on which the difference is made
+:param ax: on which the surface is plotted
+\end{DoxyVerb}
+ 

@@ -1,0 +1,98 @@
+\hypertarget{classcommittee_1_1_committee}{}\doxysection{committee.\+Committee Class Reference}
+\label{classcommittee_1_1_committee}\index{committee.Committee@{committee.Committee}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classcommittee_1_1_committee_a3170dc2d97123508b60519106c0cf84c}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, models\+\_\+number)
+\item 
+def \mbox{\hyperlink{classcommittee_1_1_committee_a1c8692e0091d4a4946d9154d7f1b0d3f}{build\+\_\+model}} (self, normalizer, layers, optimizer=\char`\"{}adam\char`\"{})
+\item 
+def \mbox{\hyperlink{classcommittee_1_1_committee_a8f3c9e7ae1b0ece7786901a4b6d8cd58}{fit}} (self, train\+\_\+features, train\+\_\+labels, epochs, batch\+\_\+size=30, verbose=1, split\+\_\+train=False, bootstrap=None)
+\item 
+def \mbox{\hyperlink{classcommittee_1_1_committee_ae4f9502149563a41fff321e4c4336913}{predict}} (self, data\+\_\+features)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_committee_ad6141d644ed8c8ab6c2b3295193e00b1}\label{classcommittee_1_1_committee_ad6141d644ed8c8ab6c2b3295193e00b1}} 
+{\bfseries models\+\_\+number}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_committee_a14315ba84644f5ba0a0fb3eb71730060}\label{classcommittee_1_1_committee_a14315ba84644f5ba0a0fb3eb71730060}} 
+{\bfseries models}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}A committee of identical models, initialized with the number of models,
+The models are automatically built, and fit when the appropriate functions are called
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classcommittee_1_1_committee_a3170dc2d97123508b60519106c0cf84c}\label{classcommittee_1_1_committee_a3170dc2d97123508b60519106c0cf84c}} 
+\index{committee.Committee@{committee.Committee}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!committee.Committee@{committee.Committee}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def committee.\+Committee.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{models\+\_\+number }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Initialzations
+:param models_number: (int) number of models in the committee
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classcommittee_1_1_committee_a1c8692e0091d4a4946d9154d7f1b0d3f}\label{classcommittee_1_1_committee_a1c8692e0091d4a4946d9154d7f1b0d3f}} 
+\index{committee.Committee@{committee.Committee}!build\_model@{build\_model}}
+\index{build\_model@{build\_model}!committee.Committee@{committee.Committee}}
+\doxysubsubsection{\texorpdfstring{build\_model()}{build\_model()}}
+{\footnotesize\ttfamily def committee.\+Committee.\+build\+\_\+model (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{normalizer,  }\item[{}]{layers,  }\item[{}]{optimizer = {\ttfamily \char`\"{}adam\char`\"{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Build and compile the models of the committee
+:param normalizer: the first normalizer layer of the models
+:param layers: (int list) [# neurons in layer1, ... # neurons in layern]
+                containing the shape of the networks
+:param optimizer: (str) Optimizer of the backpropagation
+:return: None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classcommittee_1_1_committee_a8f3c9e7ae1b0ece7786901a4b6d8cd58}\label{classcommittee_1_1_committee_a8f3c9e7ae1b0ece7786901a4b6d8cd58}} 
+\index{committee.Committee@{committee.Committee}!fit@{fit}}
+\index{fit@{fit}!committee.Committee@{committee.Committee}}
+\doxysubsubsection{\texorpdfstring{fit()}{fit()}}
+{\footnotesize\ttfamily def committee.\+Committee.\+fit (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{train\+\_\+features,  }\item[{}]{train\+\_\+labels,  }\item[{}]{epochs,  }\item[{}]{batch\+\_\+size = {\ttfamily 30},  }\item[{}]{verbose = {\ttfamily 1},  }\item[{}]{split\+\_\+train = {\ttfamily False},  }\item[{}]{bootstrap = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Fit the models with the train_features over some epochs epochs
+:param train_features: DataFrame, [DataFrame1, DataFrame2....]
+                        If a list (of len n_model) is given, each element is given
+                            to the respective model
+                        Else has to be a dataframe
+                        The input training data
+:param train_labels: As above
+                        The expected labels from the training data
+:param epochs: int, Number of epochs of training
+:param batch_size: int, batch size
+:param verbose: Bool, if 1, prints the loss function at each epoch
+                      if 0, only prints when each model starts the training
+:param split_train: Bool, if True, the training set is divided into n_models parts
+                            as possible
+                    Overwritten by a float bootstrap
+                    Overwritten by a list of train features
+:param bootstrap: None, float, if float, each model trains on a sample of the training set
+                    Overwrites split_train
+                    Overwritten by a list of train features
+:return: history_list: list of the output of each fit
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classcommittee_1_1_committee_ae4f9502149563a41fff321e4c4336913}\label{classcommittee_1_1_committee_ae4f9502149563a41fff321e4c4336913}} 
+\index{committee.Committee@{committee.Committee}!predict@{predict}}
+\index{predict@{predict}!committee.Committee@{committee.Committee}}
+\doxysubsubsection{\texorpdfstring{predict()}{predict()}}
+{\footnotesize\ttfamily def committee.\+Committee.\+predict (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{data\+\_\+features }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Predict the output from the input features
+:param data_features: dataframe containing the input
+:return: list of arrays containing the predictions from each model
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Ravikularaman/\+Pycharm\+Projects/sruthi-\/co-\/pes/src/committee.\+py\end{DoxyCompactItemize}

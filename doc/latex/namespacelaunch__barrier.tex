@@ -1,0 +1,156 @@
+\hypertarget{namespacelaunch__barrier}{}\doxysection{launch\+\_\+barrier Namespace Reference}
+\label{namespacelaunch__barrier}\index{launch\_barrier@{launch\_barrier}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_a38058371208b5d6aec0885dc69d51212}{input\+\_\+template}} (template\+\_\+name)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_a319e65c0fca15c9d39d88bf0a9cd5160}{change\+\_\+input}} (epsilon, alpha3)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_a1dc561887c6092dee2e3378401c50514}{launch\+\_\+barrier}} ()
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_a69b4aca5e1a580056aec451a7565b65f}{change\+\_\+file\+\_\+name}} (name, new\+\_\+name, pash\+\_\+to\+\_\+data=True, keep\+\_\+original=True)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_aee35db1b9e53ecce5f76ac832a5ebd9b}{pash\+\_\+to\+\_\+dataframe}} (path, new\+\_\+\+P1=\char`\"{}epsilon\char`\"{}, new\+\_\+\+P2=\char`\"{}a3\char`\"{}, start\+\_\+indice=0)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_a4a89e15f2d85af70f0ef173f436462c3}{pash\+\_\+to\+\_\+type\+\_\+1\+\_\+barrier}} (path)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_a49be6ca54f965c211ed0d0dca8d300ba}{pash\+\_\+type\+\_\+1\+\_\+to\+\_\+dataframe}} (epsilon, alpha\+\_\+3, barrier, index, features, target)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_abe2318c43a53852dc508445c6a5b7a69}{change\+\_\+input\+\_\+type\+\_\+1}} (epsilon, alpha\+\_\+3)
+\item 
+def \mbox{\hyperlink{namespacelaunch__barrier_ad9960944456f6b5b43cc415ca7f0a0ee}{launch\+\_\+barrier\+\_\+type\+\_\+1}} (epsilon, alpha\+\_\+3, index)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacelaunch__barrier_a4fe38122fddfc72f817e8ea4872d3467}\label{namespacelaunch__barrier_a4fe38122fddfc72f817e8ea4872d3467}} 
+{\bfseries epsilon}
+\item 
+\mbox{\Hypertarget{namespacelaunch__barrier_ac23a02c29d57c9a2b5939e7bb62705ad}\label{namespacelaunch__barrier_ac23a02c29d57c9a2b5939e7bb62705ad}} 
+{\bfseries alpha3}
+\item 
+\mbox{\Hypertarget{namespacelaunch__barrier_aab77391aed9b518c979988a889ebaee9}\label{namespacelaunch__barrier_aab77391aed9b518c979988a889ebaee9}} 
+{\bfseries pash\+\_\+to\+\_\+data}
+\item 
+\mbox{\Hypertarget{namespacelaunch__barrier_aa2b6b01dfeb479cc4e9fe389a690db7a}\label{namespacelaunch__barrier_aa2b6b01dfeb479cc4e9fe389a690db7a}} 
+def {\bfseries data} = \mbox{\hyperlink{namespacelaunch__barrier_aee35db1b9e53ecce5f76ac832a5ebd9b}{pash\+\_\+to\+\_\+dataframe}}(\char`\"{}data/pash/pash\+\_\+step3.\+dat\char`\"{}, new\+\_\+\+P1=\textquotesingle{}epsilon\textquotesingle{}, new\+\_\+\+P2=\textquotesingle{}a3\textquotesingle{})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Functions to change the input and run the barrier code and store its data output
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacelaunch__barrier_a69b4aca5e1a580056aec451a7565b65f}\label{namespacelaunch__barrier_a69b4aca5e1a580056aec451a7565b65f}} 
+\index{launch\_barrier@{launch\_barrier}!change\_file\_name@{change\_file\_name}}
+\index{change\_file\_name@{change\_file\_name}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{change\_file\_name()}{change\_file\_name()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+change\+\_\+file\+\_\+name (\begin{DoxyParamCaption}\item[{}]{name,  }\item[{}]{new\+\_\+name,  }\item[{}]{pash\+\_\+to\+\_\+data = {\ttfamily True},  }\item[{}]{keep\+\_\+original = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Changes file name into new_name.
+Inside the barrier directory and while keeping the original file by default.
+:param name: (str) old file name
+:param new_name: (str) new file name
+:param pash_to_data: (bool) if True, will operate from barrier/ to data/pash
+:param keep_original: (bool) if True, will not delete the original file
+:return: None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_a319e65c0fca15c9d39d88bf0a9cd5160}\label{namespacelaunch__barrier_a319e65c0fca15c9d39d88bf0a9cd5160}} 
+\index{launch\_barrier@{launch\_barrier}!change\_input@{change\_input}}
+\index{change\_input@{change\_input}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{change\_input()}{change\_input()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+change\+\_\+input (\begin{DoxyParamCaption}\item[{}]{epsilon,  }\item[{}]{alpha3 }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes values for epsilon and alpha_3 in the form of lists with min value, max value
+and the last value is either the number of points needed in between min and max values or the incrementation step.
+Changes the barrier.inp (of type 2 template) with these input values for epsilon and alpha_3.
+:param epsilon: (list) [min, max, n]
+:param alpha3: (list) [min, max, n]
+:return: None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_abe2318c43a53852dc508445c6a5b7a69}\label{namespacelaunch__barrier_abe2318c43a53852dc508445c6a5b7a69}} 
+\index{launch\_barrier@{launch\_barrier}!change\_input\_type\_1@{change\_input\_type\_1}}
+\index{change\_input\_type\_1@{change\_input\_type\_1}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{change\_input\_type\_1()}{change\_input\_type\_1()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+change\+\_\+input\+\_\+type\+\_\+1 (\begin{DoxyParamCaption}\item[{}]{epsilon,  }\item[{}]{alpha\+\_\+3 }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes values for epsilon and alpha_3.
+Changes the barrier.inp (of type 1 template) with these input values for epsilon and alpha_3.
+:param epsilon: (float) epsilon value
+:param alpha_3: (float) alpha_3 value
+:return: None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_a38058371208b5d6aec0885dc69d51212}\label{namespacelaunch__barrier_a38058371208b5d6aec0885dc69d51212}} 
+\index{launch\_barrier@{launch\_barrier}!input\_template@{input\_template}}
+\index{input\_template@{input\_template}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{input\_template()}{input\_template()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+input\+\_\+template (\begin{DoxyParamCaption}\item[{}]{template\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Changes barrier.inp to a template from barrier/template.
+Available templates: RUN1, RUN2, RUN3, RUN4, step3, test, type1, type2
+:param template_name: (str) name, no path, no .dat
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_a1dc561887c6092dee2e3378401c50514}\label{namespacelaunch__barrier_a1dc561887c6092dee2e3378401c50514}} 
+\index{launch\_barrier@{launch\_barrier}!launch\_barrier@{launch\_barrier}}
+\index{launch\_barrier@{launch\_barrier}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{launch\_barrier()}{launch\_barrier()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+launch\+\_\+barrier (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Launches the barrier.exe code.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_ad9960944456f6b5b43cc415ca7f0a0ee}\label{namespacelaunch__barrier_ad9960944456f6b5b43cc415ca7f0a0ee}} 
+\index{launch\_barrier@{launch\_barrier}!launch\_barrier\_type\_1@{launch\_barrier\_type\_1}}
+\index{launch\_barrier\_type\_1@{launch\_barrier\_type\_1}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{launch\_barrier\_type\_1()}{launch\_barrier\_type\_1()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+launch\+\_\+barrier\+\_\+type\+\_\+1 (\begin{DoxyParamCaption}\item[{}]{epsilon,  }\item[{}]{alpha\+\_\+3,  }\item[{}]{index }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes a value for epsilon, alpha_3 to run barrier.exe (type 1 run) returns a DataFrame with the line given by index.
+:param epsilon: (float) epsilon value
+:param alpha_3: (float) alpha_3
+:param index: (int) index of line in the created DataFrame
+:return data_point: (pandas DataFrame) DataFrame containing the line with epsilon, alpha_3 and fission barrier
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_aee35db1b9e53ecce5f76ac832a5ebd9b}\label{namespacelaunch__barrier_aee35db1b9e53ecce5f76ac832a5ebd9b}} 
+\index{launch\_barrier@{launch\_barrier}!pash\_to\_dataframe@{pash\_to\_dataframe}}
+\index{pash\_to\_dataframe@{pash\_to\_dataframe}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{pash\_to\_dataframe()}{pash\_to\_dataframe()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+pash\+\_\+to\+\_\+dataframe (\begin{DoxyParamCaption}\item[{}]{path,  }\item[{}]{new\+\_\+\+P1 = {\ttfamily \char`\"{}epsilon\char`\"{}},  }\item[{}]{new\+\_\+\+P2 = {\ttfamily \char`\"{}a3\char`\"{}},  }\item[{}]{start\+\_\+indice = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes the path to a pash.dat file from a type 2 run and returns a pandas DataFrame.
+The keys P(1),P(2) are respectively renamed to new_P1, new_P2.
+:param path: (str) path to a file
+:param new_P1: (str) new name for the variable P(1)
+:param new_P2: (str) new name for the variable P(2)
+:param start_indice: (int) first index in the created DataFrame
+:return data: (pandas DataFrame) DataFrame containing all the variables and data from the input file
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_a4a89e15f2d85af70f0ef173f436462c3}\label{namespacelaunch__barrier_a4a89e15f2d85af70f0ef173f436462c3}} 
+\index{launch\_barrier@{launch\_barrier}!pash\_to\_type\_1\_barrier@{pash\_to\_type\_1\_barrier}}
+\index{pash\_to\_type\_1\_barrier@{pash\_to\_type\_1\_barrier}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{pash\_to\_type\_1\_barrier()}{pash\_to\_type\_1\_barrier()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+pash\+\_\+to\+\_\+type\+\_\+1\+\_\+barrier (\begin{DoxyParamCaption}\item[{}]{path }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes the path to a pash.dat file from a type 1 run and returns the value of fission barrier.
+:param path: (str) path to file
+:return barrier: (float) fission barrier value
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacelaunch__barrier_a49be6ca54f965c211ed0d0dca8d300ba}\label{namespacelaunch__barrier_a49be6ca54f965c211ed0d0dca8d300ba}} 
+\index{launch\_barrier@{launch\_barrier}!pash\_type\_1\_to\_dataframe@{pash\_type\_1\_to\_dataframe}}
+\index{pash\_type\_1\_to\_dataframe@{pash\_type\_1\_to\_dataframe}!launch\_barrier@{launch\_barrier}}
+\doxysubsubsection{\texorpdfstring{pash\_type\_1\_to\_dataframe()}{pash\_type\_1\_to\_dataframe()}}
+{\footnotesize\ttfamily def launch\+\_\+barrier.\+pash\+\_\+type\+\_\+1\+\_\+to\+\_\+dataframe (\begin{DoxyParamCaption}\item[{}]{epsilon,  }\item[{}]{alpha\+\_\+3,  }\item[{}]{barrier,  }\item[{}]{index,  }\item[{}]{features,  }\item[{}]{target }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Takes a value of epsilon, alpha_3 and fission barrier and returns a DataFrame of these three values
+with the line given by index and columns given by features key and target key.
+:param epsilon: (float) epsilon value
+:param alpha_3: (float) alpha_3 value
+:param barrier: (float) fission barrier value
+:param barrier: (int) index of line in the created DataFrame
+:param features: (str list) list of keys for features
+:param target: (str) key for target
+:return data_point: (pandas DataFrame) DataFrame containing the line with epsilon, alpha_3 and fission barrier
+\end{DoxyVerb}
+ 

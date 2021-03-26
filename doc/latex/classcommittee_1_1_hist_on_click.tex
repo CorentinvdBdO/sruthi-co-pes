@@ -1,0 +1,89 @@
+\hypertarget{classcommittee_1_1_hist_on_click}{}\doxysection{committee.\+Hist\+On\+Click Class Reference}
+\label{classcommittee_1_1_hist_on_click}\index{committee.HistOnClick@{committee.HistOnClick}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classcommittee_1_1_hist_on_click_a7777fc6c5c0798118d1ffbbc2993c0b2}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, ax1, ax2, committee, data, features, target, in\+\_\+order=True)
+\item 
+def \mbox{\hyperlink{classcommittee_1_1_hist_on_click_a9ea410af907cf6bb8cca22ae9850a370}{on\+\_\+click}} (self, event)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a818a59330bceccbe0e112c3e7b251054}\label{classcommittee_1_1_hist_on_click_a818a59330bceccbe0e112c3e7b251054}} 
+{\bfseries committee}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_acd5291a79f578f507f6e3bcb4f7e46e4}\label{classcommittee_1_1_hist_on_click_acd5291a79f578f507f6e3bcb4f7e46e4}} 
+{\bfseries ax1}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a33b97e0e941a9be4fcf6247769c1240d}\label{classcommittee_1_1_hist_on_click_a33b97e0e941a9be4fcf6247769c1240d}} 
+{\bfseries ax2}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a9af87cd5a1c536e116bb879c13f327d7}\label{classcommittee_1_1_hist_on_click_a9af87cd5a1c536e116bb879c13f327d7}} 
+{\bfseries in\+\_\+order}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a85ebe2e366c59c9c1a38c68958e3a3c9}\label{classcommittee_1_1_hist_on_click_a85ebe2e366c59c9c1a38c68958e3a3c9}} 
+{\bfseries data}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a95a88e0c5607ea8e6d74932436956b13}\label{classcommittee_1_1_hist_on_click_a95a88e0c5607ea8e6d74932436956b13}} 
+{\bfseries features}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a01e8a36ee688ade89a1bec37fad39fe3}\label{classcommittee_1_1_hist_on_click_a01e8a36ee688ade89a1bec37fad39fe3}} 
+{\bfseries target}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_add6afb48827f3a995004b3eb9b86a876}\label{classcommittee_1_1_hist_on_click_add6afb48827f3a995004b3eb9b86a876}} 
+{\bfseries min1}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_ab772045335363b8bfc9ba05e4a69e2af}\label{classcommittee_1_1_hist_on_click_ab772045335363b8bfc9ba05e4a69e2af}} 
+{\bfseries min2}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_aef84b3e124ca54fe2584cd6d3a70ebf0}\label{classcommittee_1_1_hist_on_click_aef84b3e124ca54fe2584cd6d3a70ebf0}} 
+{\bfseries len2}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a958f528e4fb18ec99e80b1fd4c63f2bf}\label{classcommittee_1_1_hist_on_click_a958f528e4fb18ec99e80b1fd4c63f2bf}} 
+{\bfseries step1}
+\item 
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_afeb5093db6dfdb941dff632563cc9437}\label{classcommittee_1_1_hist_on_click_afeb5093db6dfdb941dff632563cc9437}} 
+{\bfseries step2}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}This class makes the histogram of the values for a point, predicted
+by different models of the committee when the point is clicked.
+It adds the mean predicted value and the expected value.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a7777fc6c5c0798118d1ffbbc2993c0b2}\label{classcommittee_1_1_hist_on_click_a7777fc6c5c0798118d1ffbbc2993c0b2}} 
+\index{committee.HistOnClick@{committee.HistOnClick}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!committee.HistOnClick@{committee.HistOnClick}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def committee.\+Hist\+On\+Click.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ax1,  }\item[{}]{ax2,  }\item[{}]{committee,  }\item[{}]{data,  }\item[{}]{features,  }\item[{}]{target,  }\item[{}]{in\+\_\+order = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}:param ax1: ax where the points can be clicked
+:param ax2: ax on which the histogram is plotted
+:param committee: a Committee object
+:param data: data from which the expected target comes
+:param features: list of str, list of keys
+:param target: str, key of the target
+:param in_order: say True if the dataset is ordered in a grid pattern. It makes the function quicker
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classcommittee_1_1_hist_on_click_a9ea410af907cf6bb8cca22ae9850a370}\label{classcommittee_1_1_hist_on_click_a9ea410af907cf6bb8cca22ae9850a370}} 
+\index{committee.HistOnClick@{committee.HistOnClick}!on\_click@{on\_click}}
+\index{on\_click@{on\_click}!committee.HistOnClick@{committee.HistOnClick}}
+\doxysubsubsection{\texorpdfstring{on\_click()}{on\_click()}}
+{\footnotesize\ttfamily def committee.\+Hist\+On\+Click.\+on\+\_\+click (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{event }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}On a click, plot the histogram corresponding to the point
+:param event: from the click event
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Ravikularaman/\+Pycharm\+Projects/sruthi-\/co-\/pes/src/committee.\+py\end{DoxyCompactItemize}

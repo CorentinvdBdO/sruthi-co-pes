@@ -1,0 +1,122 @@
+\hypertarget{namespacecommittee}{}\doxysection{committee Namespace Reference}
+\label{namespacecommittee}\index{committee@{committee}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classcommittee_1_1_committee}{Committee}}
+\item 
+class \mbox{\hyperlink{classcommittee_1_1_hist_on_click}{Hist\+On\+Click}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacecommittee_ac4868b860891a3c23dc68e80943659bb}{get\+\_\+mean\+\_\+var}} (list\+\_\+prediction)
+\item 
+def \mbox{\hyperlink{namespacecommittee_a12303e6579da87a07c48c661e9bc0fc1}{plot\+\_\+histo}} (committee, point\+\_\+features, expected\+\_\+value, ax=plt.\+gca())
+\item 
+def \mbox{\hyperlink{namespacecommittee_acce661256b5d8006bfc32f9098437545}{interactive\+\_\+plots}} (committee, features, target, data, train\+\_\+dataset, plot\+\_\+train=True)
+\item 
+def \mbox{\hyperlink{namespacecommittee_a4616cbddc9197bd5f3996bf6139845ae}{save\+\_\+committee}} (dir\+\_\+name, committee)
+\item 
+def \mbox{\hyperlink{namespacecommittee_ab431cce983a6d5cbb7baa5e97e9f74d9}{load\+\_\+committee}} (dir\+\_\+name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacecommittee_aa02d95fb9c1ce8418d9e445e00de9597}\label{namespacecommittee_aa02d95fb9c1ce8418d9e445e00de9597}} 
+list {\bfseries features} = \mbox{[}\char`\"{}epsilon\char`\"{}, \char`\"{}a3\char`\"{}\mbox{]}
+\item 
+\mbox{\Hypertarget{namespacecommittee_a321afd4a7601670cdec53a2cdd903b49}\label{namespacecommittee_a321afd4a7601670cdec53a2cdd903b49}} 
+{\bfseries data} = pash\+\_\+to\+\_\+dataframe(\char`\"{}data/pash/large\+\_\+pash.\+dat\char`\"{})
+\item 
+\mbox{\Hypertarget{namespacecommittee_a61deb75e72b397c12ebebeba6ceaab2c}\label{namespacecommittee_a61deb75e72b397c12ebebeba6ceaab2c}} 
+{\bfseries frac}
+\item 
+\mbox{\Hypertarget{namespacecommittee_a482a7845cc298f4fd8083439e7be527b}\label{namespacecommittee_a482a7845cc298f4fd8083439e7be527b}} 
+def {\bfseries committee} = \mbox{\hyperlink{namespacecommittee_ab431cce983a6d5cbb7baa5e97e9f74d9}{load\+\_\+committee}}(\char`\"{}testing\char`\"{})
+\item 
+\mbox{\Hypertarget{namespacecommittee_a113bd5c83cba1ea90df0154421b8d4ae}\label{namespacecommittee_a113bd5c83cba1ea90df0154421b8d4ae}} 
+{\bfseries list\+\_\+prediction} = committee.\+predict(data\mbox{[}features\mbox{]})
+\item 
+\mbox{\Hypertarget{namespacecommittee_a7274ecc6ff4e827785e1c0e26414e97d}\label{namespacecommittee_a7274ecc6ff4e827785e1c0e26414e97d}} 
+{\bfseries predicted\+\_\+target} = np.\+ravel(predicted\+\_\+target)
+\item 
+\mbox{\Hypertarget{namespacecommittee_a31d5dad2477c1878139324d8505bbc9b}\label{namespacecommittee_a31d5dad2477c1878139324d8505bbc9b}} 
+{\bfseries variance}
+\item 
+\mbox{\Hypertarget{namespacecommittee_a202f5adf2d40b8f4469632b595a65f23}\label{namespacecommittee_a202f5adf2d40b8f4469632b595a65f23}} 
+{\bfseries rmse} = np.\+sqrt(calculate\+\_\+mse(predicted\+\_\+target, data\mbox{[}\char`\"{}Barrier\char`\"{}\mbox{]}))
+\item 
+\mbox{\Hypertarget{namespacecommittee_a958e50b03c61389f107ea572dc00796e}\label{namespacecommittee_a958e50b03c61389f107ea572dc00796e}} 
+def {\bfseries o} = \mbox{\hyperlink{namespacecommittee_acce661256b5d8006bfc32f9098437545}{interactive\+\_\+plots}}(committee, features, \char`\"{}Barrier\char`\"{}, data, train\+\_\+dataset, plot\+\_\+train=False)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Functions regarding the class Committee, managing a committee of models
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacecommittee_ac4868b860891a3c23dc68e80943659bb}\label{namespacecommittee_ac4868b860891a3c23dc68e80943659bb}} 
+\index{committee@{committee}!get\_mean\_var@{get\_mean\_var}}
+\index{get\_mean\_var@{get\_mean\_var}!committee@{committee}}
+\doxysubsubsection{\texorpdfstring{get\_mean\_var()}{get\_mean\_var()}}
+{\footnotesize\ttfamily def committee.\+get\+\_\+mean\+\_\+var (\begin{DoxyParamCaption}\item[{}]{list\+\_\+prediction }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the mean prediction and the variance over it from the output of committee.predict
+:param list_prediction: list of arrays, output of committee.predict
+:return: mean_list: list of the mean prediction from all models
+:return: var_list: list of the standard on the prediction from all models
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecommittee_acce661256b5d8006bfc32f9098437545}\label{namespacecommittee_acce661256b5d8006bfc32f9098437545}} 
+\index{committee@{committee}!interactive\_plots@{interactive\_plots}}
+\index{interactive\_plots@{interactive\_plots}!committee@{committee}}
+\doxysubsubsection{\texorpdfstring{interactive\_plots()}{interactive\_plots()}}
+{\footnotesize\ttfamily def committee.\+interactive\+\_\+plots (\begin{DoxyParamCaption}\item[{}]{committee,  }\item[{}]{features,  }\item[{}]{target,  }\item[{}]{data,  }\item[{}]{train\+\_\+dataset,  }\item[{}]{plot\+\_\+train = {\ttfamily True} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Plots many interesting plots for a committee: Variance, histogram, predicted and absolute error
+:param committee: Committee object
+:param features: list of str, keys
+:param target: str, key
+:param data: dataframe to test
+:param train_dataset: dataframe, train dataset will be plotted if plot_train is True
+:param plot_train: bool, if True, plot the training  dataset
+:return:
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecommittee_ab431cce983a6d5cbb7baa5e97e9f74d9}\label{namespacecommittee_ab431cce983a6d5cbb7baa5e97e9f74d9}} 
+\index{committee@{committee}!load\_committee@{load\_committee}}
+\index{load\_committee@{load\_committee}!committee@{committee}}
+\doxysubsubsection{\texorpdfstring{load\_committee()}{load\_committee()}}
+{\footnotesize\ttfamily def committee.\+load\+\_\+committee (\begin{DoxyParamCaption}\item[{}]{dir\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load a committee from a file
+:param dir_name: str, name of the committee
+:return: Committee object
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecommittee_a12303e6579da87a07c48c661e9bc0fc1}\label{namespacecommittee_a12303e6579da87a07c48c661e9bc0fc1}} 
+\index{committee@{committee}!plot\_histo@{plot\_histo}}
+\index{plot\_histo@{plot\_histo}!committee@{committee}}
+\doxysubsubsection{\texorpdfstring{plot\_histo()}{plot\_histo()}}
+{\footnotesize\ttfamily def committee.\+plot\+\_\+histo (\begin{DoxyParamCaption}\item[{}]{committee,  }\item[{}]{point\+\_\+features,  }\item[{}]{expected\+\_\+value,  }\item[{}]{ax = {\ttfamily plt.gca()} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}plot the histogram of the prediction on one point by each model of a committee
+Adds a vertical bar for the mean and for the expected value
+:param committee: Committee object
+:param point_features: single entry dataframe
+:param expected_value: expected value on the point
+:param ax: ax on which to plot the histogram
+:return:
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacecommittee_a4616cbddc9197bd5f3996bf6139845ae}\label{namespacecommittee_a4616cbddc9197bd5f3996bf6139845ae}} 
+\index{committee@{committee}!save\_committee@{save\_committee}}
+\index{save\_committee@{save\_committee}!committee@{committee}}
+\doxysubsubsection{\texorpdfstring{save\_committee()}{save\_committee()}}
+{\footnotesize\ttfamily def committee.\+save\+\_\+committee (\begin{DoxyParamCaption}\item[{}]{dir\+\_\+name,  }\item[{}]{committee }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Save a committee
+:param dir_name: str, name of the committee
+:param committee: Committee object
+:return: None
+\end{DoxyVerb}
+ 

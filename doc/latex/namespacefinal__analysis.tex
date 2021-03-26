@@ -1,0 +1,41 @@
+\hypertarget{namespacefinal__analysis}{}\doxysection{final\+\_\+analysis Namespace Reference}
+\label{namespacefinal__analysis}\index{final\_analysis@{final\_analysis}}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a05c238118f3fac55df0d7bcf702539a2}\label{namespacefinal__analysis_a05c238118f3fac55df0d7bcf702539a2}} 
+list {\bfseries features} = \mbox{[}\char`\"{}epsilon\char`\"{}, \char`\"{}a3\char`\"{}\mbox{]}
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_aab6dc4eedb18205ed0e2c15559ec7edb}\label{namespacefinal__analysis_aab6dc4eedb18205ed0e2c15559ec7edb}} 
+string {\bfseries model\+\_\+name} = \char`\"{}active\+\_\+trained2\char`\"{}
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_aad8f629fc56b5f62649deee344afaaef}\label{namespacefinal__analysis_aad8f629fc56b5f62649deee344afaaef}} 
+{\bfseries committee} = load\+\_\+committee(model\+\_\+name)
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a627ea9803cc3badaebb6f1d9f7612760}\label{namespacefinal__analysis_a627ea9803cc3badaebb6f1d9f7612760}} 
+{\bfseries data} = pash\+\_\+to\+\_\+dataframe(\char`\"{}data/pash/large\+\_\+pash.\+dat\char`\"{})
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a37050dc30410d6f7d4a47d42b037f676}\label{namespacefinal__analysis_a37050dc30410d6f7d4a47d42b037f676}} 
+{\bfseries train\+\_\+dataset} = pd.\+read\+\_\+csv(\char`\"{}data/csv/\char`\"{}+model\+\_\+name+\char`\"{}.csv\char`\"{})
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_acf4e21659f001681740a969727293f14}\label{namespacefinal__analysis_acf4e21659f001681740a969727293f14}} 
+{\bfseries list\+\_\+prediction} = committee.\+predict(data\mbox{[}features\mbox{]})
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a76bffaeba9abbc2012a6dd73fbe0a003}\label{namespacefinal__analysis_a76bffaeba9abbc2012a6dd73fbe0a003}} 
+{\bfseries predicted\+\_\+target} = retransform(data\mbox{[}features\mbox{]}, predicted\+\_\+target)
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a0adec1fcc54cf6a38c33caef25d98f22}\label{namespacefinal__analysis_a0adec1fcc54cf6a38c33caef25d98f22}} 
+{\bfseries variance}
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a014a35158981b14c866339916ffd5d91}\label{namespacefinal__analysis_a014a35158981b14c866339916ffd5d91}} 
+{\bfseries rmse} = np.\+sqrt(calculate\+\_\+mse(np.\+ravel(predicted\+\_\+target), data\mbox{[}\char`\"{}Barrier\char`\"{}\mbox{]}))
+\item 
+\mbox{\Hypertarget{namespacefinal__analysis_a698d8b11128fafcba0d03db064248965}\label{namespacefinal__analysis_a698d8b11128fafcba0d03db064248965}} 
+{\bfseries o} = interactive\+\_\+plots(committee, features, \char`\"{}Barrier\char`\"{}, data, train\+\_\+dataset, plot\+\_\+train=False)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}This file simply loads a committee to study its results
+\end{DoxyVerb}
+ 
