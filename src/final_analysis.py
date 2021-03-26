@@ -1,3 +1,6 @@
+"""
+This file simply load a committee to study its results
+"""
 from committee import load_committee, interactive_plots, get_mean_var
 from analysis import calculate_mse, plot_surface_diff, plot_surface
 from launch_barrier import pash_to_dataframe, launch_barrier_type_1
@@ -8,12 +11,17 @@ import pandas as pd
 
 if __name__ == '__main__':
     features = ["epsilon", "a3"]
-    committee = load_committee("active_trained5")
+    model_name = "active_trained6"
+    print("Loading committee ", model_name)
+    committee = load_committee(model_name)
+    print("Loaded committee of ", committee.models_number, " models.")
     data = pash_to_dataframe("data/pash/large_pash.dat")
-
-    train_dataset = pd.read_csv("data/csv/active_trained5.csv")
-
+    print("Loaded the test dataset. ",len(data), " elements")
+    train_dataset = pd.read_csv("data/csv/"+model_name+".csv")
+    print("Loaded the train dataset. ",len(train_dataset), " elements")
+    print("Predicting the test set...")
     list_prediction = committee.predict(data[features])
+    print("Done.")
     predicted_target, variance = get_mean_var(list_prediction)
     rmse = np.sqrt(calculate_mse(np.ravel(predicted_target), data["Barrier"]))
     predicted_target = retransform(data[features], predicted_target)
