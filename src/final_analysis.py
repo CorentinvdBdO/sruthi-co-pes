@@ -11,6 +11,7 @@ import pandas as pd
 
 if __name__ == '__main__':
     features = ["epsilon", "a3"]
+    # active_trained2 to 6 exist with different training sets and shapes
     model_name = "active_trained2"
     print("Loading committee ", model_name)
     committee = load_committee(model_name)
