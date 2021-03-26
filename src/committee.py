@@ -1,3 +1,6 @@
+"""
+Functions regarding the class Committee, managing a committee of models
+"""
 from nn_regression import create_datasets, normalize, build_model, retransform
 import numpy as np
 from analysis import pash_to_dataframe, plot_contour, plot_points
