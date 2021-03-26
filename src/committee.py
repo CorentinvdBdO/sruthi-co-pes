@@ -169,8 +169,8 @@ def load_committee(dir_name):
     n_models = 0
     os.chdir("data/models/"+dir_name)
     for filename in os.listdir():
-        models+=[tf.keras.models.load_model(filename)]
-        n_models+=1
+        models += [tf.keras.models.load_model(filename)]
+        n_models += 1
     committee = Committee(n_models)
     committee.models = models
     os.chdir("../../..")

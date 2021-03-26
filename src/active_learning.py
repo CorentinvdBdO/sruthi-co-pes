@@ -17,7 +17,7 @@ if __name__ == "__main__":
     epsilon_range = [-0.1, 0.9, 9]  # [f,f,int]    Range and initial dataset creation
     alpha_range = [0, 0.2, 9]       # [f,f,int]    Range and initial dataset creation
     empty_grid_size = 101           # int          Variance will be tested on a grid of this size
-    goal_variance = 0.4             # float        Goal for the maximum variance
+    goal_variance = 0.1             # float        Goal for the maximum variance
     epoch_max = 10000               # int          Epoch at which the training automatically stops
     size_max = 400                  # int          Size maximum of the total train dataset
     features = ["epsilon", "a3"]    # [str]        Key argument of the features
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     #                               reshuffled between each iteration between the training sets
     #                               each set is a sample with frac=bootstrap.
     #                               Overwrites bootstrap and split_train
-    name_committee = "active_trained6" # Name under which the committee is stored
+    name_committee = "active_trained7" # Name under which the committee is stored
 
     '''Create initial empty file from large_pash'''
     # |||||||||||||||||| Create an empty grid:
