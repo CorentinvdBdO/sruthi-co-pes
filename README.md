@@ -29,26 +29,41 @@ Tensorflow.keras
 ## File organisation
 
 src : source files
+
 src/launch_barrier.py
+
 src/nn_regression.py
+
 src/hyperparameters.py
+
 src/committee.py
+
 src/active_learning.py
+
 src/analysis.py
+
 src/final_analysis.py
 
 barrier : files necessary to run barrier code
+
 barrier/input_templates : a list of templates that can be used
+
 barrier/barrier.exe : barrier code
+
 barrier/barrier.inp : input for the barrier code
+
 barrier/pash.dat : results of a barrier run
 
 data : storage unit for models and generated points
+
 data/csv : DataFrames (epsilon, a3, "Barrier")
+
 data/models : committees and keras models
+
 data/pash : pash.dat files with generated points
 
 results : results of the project
+
 results/hyperparameters : plots of loss as a function of hyperparameters
                           and learning curves generated to optimize the hyperparameters
 
@@ -57,13 +72,22 @@ doc : bibliography, subject of the project, presentation and documentation
 ## Usage
 
 src/launch_barrier.py : Functions to change the input and run the barrier code and store its data output.
+
 src/nn_regression.py : Functions to manipulate DataFrames for a keras fit,
-                       to build models quickly and work on the learning curves.
+to build models quickly and work on the learning curves.
+
 src/hyperparameters.py : Function to compare hyperparameters.
+
 src/committee.py : Functions regarding the class Committee, managing a committee of models.
+
 src/active_learning.py :
+
 src/analysis.py : Functions to simplify generations of different kinds of plots.
+
 src/final_analysis.py : This file simply loads a committee to study its results.
+It is recommended to start here to see the results of active learning without the need
+to launch a long active learning procedure.
+
 
 You will find in src/active_learning.py a code ready to use with many inputs to choose from.
 It generates a committee of neural networks and then trains itself generating data from the barrier code.
@@ -81,11 +105,12 @@ The training stops when the maximal variance over this grid reaches *goal_varian
 the total number of epochs reaches *epoch_max*.
 A committee of *n_models* neural networks of shape *model_shape* is generated and compiled
 using the optimizer *optimizer*.
+
 During each loop, the committee is fitted for *epochs* epochs and each model gets either the
 same training set, a different part of the training set if *split_train* is True, a sample of
 the training set of fraction *bootstrap* if it is a float, or, when *constant_training_sets* is
 True, a dedicated train_dataset that stays the same over each loop, starting as a sample of the
-initial train_dataset of fraction *bootstrap*. After the fit, a prediction of the barrier is
+initial train_dataset, of fraction *bootstrap*. After the fit, a prediction of the barrier is
 asked to each model of the committee. From the points where the variance of this prediction
 is high (top *top_variance_percentage*), *high_variance_kept* are computed and join the training
 dataset. If *constant_training_sets* is True, a fraction of them join each model's dedicated training
@@ -93,3 +118,6 @@ dataset instead.
 
 The training dataset and the committee are then saved in data/csv and data/models to be reused and analysed.
 The committee is saved in a temporary file at every iteration, so you can access it even if you stop the computations.
+
+In this algorithm, only the training points are generated during the training. A larger grid can be used but only when
+comparing the fit with the simulation.

@@ -29,13 +29,14 @@ if __name__ == '__main__':
     print("rmse = ", rmse, "MeV")
     print("Dataset of size ", len(data))
     print("Train dataset of size ", len(train_dataset))
-
+    print("Plotting the predicted surface")
     plot_surface(predicted_target, "epsilon", "a3", "Barrier")
     plt.show()
-
+    print("Plotting difference between the predicted and simulated surface")
     plot_surface_diff(data, predicted_target, "epsilon", "a3", "Barrier")
     plt.show()
-
+    print("Plotting interactive plots. Click on a point to plot its histogram.")
+    print("It is the distribution of the predicted value by each model of the committee.")
     o = interactive_plots(committee, features, "Barrier", data, train_dataset, plot_train=False)
 
     print("Finished")
